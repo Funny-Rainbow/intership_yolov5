@@ -1,0 +1,5 @@
+path: D:\Deep Learning\yolov5-master\datasets\uc
+train: D:\Deep Learning\yolov5-master\datasets\uc\images\train
+val: D:\Deep Learning\yolov5-master\datasets\uc\images\val
+
+names: ['uc']

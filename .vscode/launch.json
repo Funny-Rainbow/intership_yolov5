@@ -1,0 +1,52 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Train",
+            "type": "python",
+            "request": "launch",
+            "program": "train.py",
+            "console": "integratedTerminal",
+            //"justMyCode": true,
+            "args":[
+                "--weights","yolov5s6.pt",
+                //"--weights","D:\\Deep Learning\\yolov5-master\\runs\\train\\exp37\\weights\\best.pt",
+                "--data","data/uc.yaml",
+                "--workers","4",
+                "--batch-size","20",
+                "--epochs","500",
+                "--device","0",
+                "--imgsz","640",
+                "--patience","50",
+                //"--optimizer","AdamW",
+                //"--hyp","data/hyps/hyp.scratch-med.yaml"
+                //"--logdir","runs/train","--tensorboard"
+        ]
+        },
+
+        {
+            "name": "Detect",
+            "type": "python",
+            "request": "launch",
+            //"program": "{$workSpaceFolder}/../train.py",
+            "program": "detect.py",
+            "console": "integratedTerminal",
+            //"justMyCode": true,
+            "args":[
+                "--weights","D:\\Deep Learning\\yolov5-master\\runs\\train\\exp40\\weights\\last.pt",
+                "--data","data/uc.yaml",
+                "--conf-thres","0.1",
+                "--source","D:\\Deep Learning\\yolov5-master\\datasets\\test",
+                //"--source","D:\\Deep Learning\\camera",
+                
+                //"--augment"
+        ]
+        }
+    ]
+}
+
+//cd D:\Deep Learning\yolov5-master && python detect.py --weights runs/train/exp24/weights/best.pt --data data/uc.yaml --conf-thres 0.1 --source datasets/test
