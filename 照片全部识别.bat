@@ -1,0 +1,2 @@
+﻿conda activate yolov5 && python detect_all.py --source "H:\backup\files\jsy-camera\cameraCapture" --temp "D:\Deep Learning\yolov5-server\my_temp\images" --maxpic 10 --db_host "127.0.0.1" --db_user "root" --db_pwd "##JmMyC2810" --db_database "cvtest"
+pause
