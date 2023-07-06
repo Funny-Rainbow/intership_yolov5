@@ -14,6 +14,8 @@
 
 1.  安装Python 3.9 环境
 2.  安装Python依赖 pip install -r requirements.txt
+3.  根据环境安装CUDA
+4.  选择Pytorch、torchvision版本(默认为CPU版本)
 3.  建立数据库：id(int), create_time(datetime), device(varchar(50)), file_name(varhar(50)), confidence(float)
 
 #### 使用说明
