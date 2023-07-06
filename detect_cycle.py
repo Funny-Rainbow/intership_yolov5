@@ -6,12 +6,7 @@ import argparse
 from time import sleep, localtime, time
 
 import my_detect, sendToSQL
-"""
-参数
-set_time 选择一天中的一个时间来运行文件
-source  照片源（应该为所有设备所在的路径）
-temp    创建一个暂时存储识别照片的文件夹，识别结束后会删除
-"""
+
 source = r'H:\backup\files\jsy-camera\cameraCapture'
 temp = r'D:\Deep Learning\yolov5-master\my_temp\images'
 
@@ -25,8 +20,8 @@ def copy_files(set_date, set_time, source, temp):
             # 只复制每天09:00和14:00拍摄的图片
             time_ok = j[8:10] == '09' or j[8:10] == '14'
             if j[0:8] == set_date and time_ok:
-                hello, fileType = j.rsplit('.')
-                name, suffix = j.rsplit('.' + fileType)
+                _, fileType = j.rsplit('.')
+                name, _ = j.rsplit('.' + fileType)
                 name = name.replace('.', '')
                 old_name = file_path + '\\' + j
                 new_name = temp + '\\' + i + '_' + name + "." + fileType #文件夹名+文件名+格式
@@ -74,7 +69,6 @@ def main(set_date,set_time, source, temp):
 
 
 def parse_opt():
-    
     today = str(datetime.date.today())
     today_splited = today.split('-')# 分离年月日
     today = ''

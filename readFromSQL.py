@@ -2,7 +2,8 @@ import pymysql
 import cv2
 import argparse
 
-m=5
+# 控制显示的图像大小
+m=4
 
 def read(db_host,db_user,db_pwd,db_database):
     db = pymysql.connect(host=db_host, user= db_user, password=db_pwd, database=db_database)
@@ -13,6 +14,7 @@ def read(db_host,db_user,db_pwd,db_database):
     print(dbdata)
     return dbdata
 
+# 显示照片
 def show_images(source, dbdata):
      print("识别到",len(dbdata),"张疑似非农化照片")
      for i in range(len(dbdata)):
@@ -29,7 +31,7 @@ def show_images(source, dbdata):
               pass
           cv2.destroyAllWindows()
 
-
+# 创建参数
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--db_host',  type=str, default= '127.0.0.1', help='database host')

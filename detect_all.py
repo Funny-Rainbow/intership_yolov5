@@ -83,7 +83,6 @@ def parse_opt():
     today_splited = today.split('-')# 分离年月日
     today = ''
     today = str(today_splited[0])+str(today_splited[1]+str(today_splited[2])) #获取今天的日期
-    #today = '20230622' #仅限测试使用
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', type=str, default= source, help='path of the device root(not photos root)')
     #parser.add_argument('--source', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
@@ -98,8 +97,7 @@ def parse_opt():
 
 if __name__ == '__main__':
     m = 6   #设置照片显示大小
-    myopt = parse_opt()
-    print('parameters:',myopt)
+    myopt = parse_opt()#传参
     detected_files = main(**vars(myopt))
     # id,create_time, name, confidence
     if detected_files:
