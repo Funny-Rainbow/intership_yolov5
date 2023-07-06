@@ -17,11 +17,9 @@ temp    创建一个暂时存储识别照片的文件夹，识别结束后会删
 source = r'H:\backup\files\jsy-camera\cameraCapture'
 temp = r'D:\Deep Learning\yolov5-master\my_temp\images'
 
-def copy_files(source, temp, maxpic):
-    dir_list = os.listdir(source)# 遍历设备
-    # 遍历图片
-    for i in dir_list:
-        file_path = source + '\\' + str(i)
+def copy_files(source, temp, maxpic, dir_list):
+        
+        file_path = source + '\\' + str(dir_list)
         file_list = os.listdir(file_path)
         # 控制每个设备所识别的最大图片数量
         if len(file_list) > maxpic:
@@ -33,7 +31,7 @@ def copy_files(source, temp, maxpic):
             name, suffix = j.rsplit('.' + fileType)
             name = name.replace('.', '')
             old_name = file_path + '\\' + j
-            new_name = temp + '\\' + i + '_' + name + "." + fileType #文件夹名+文件名+格式
+            new_name = temp + '\\' + dir_list + '_' + name + "." + fileType #文件夹名+文件名+格式
             shutil.copyfile(old_name, new_name)
 
 #显示识别到的疑似非农化照片
@@ -49,29 +47,33 @@ def show_images(source, detected_files):
           cv2.destroyAllWindows()
 
 def main(source, temp, detect_show, maxpic):
-    # 只有设定的那一个小时才执行一次
-    try:
-        os.mkdir(temp)
-    except:
-        print(Exception.args)
-    copy_files( source, temp, maxpic) # 将今天的照片临时拷贝到同一目录下
-    tempDir = os.listdir(temp)
-    # 判断暂存文件夹内有无图片
-    print('找到了',len(tempDir),'张照片')
-    if len(tempDir):
-        opt = my_detect.parse_opt() # 获取需要传入ai识别的参数
-        detected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
-        if detect_show:
-            show_images(source, detected_files) # 从备份文件中查看疑似非农化的图片
+    dir_lists = os.listdir(source)
+    detected_files = []
+    for dir_list in dir_lists:
+        try:
+            os.mkdir(temp)
+        except:
+            print(Exception.args)
+        copy_files( source, temp, maxpic, dir_list) # 将今天的照片临时拷贝到同一目录下
+        tempDir = os.listdir(temp)
+        # 判断暂存文件夹内有无图片
+        print('找到了',len(tempDir),'张照片')
+        if len(tempDir):
+            opt = my_detect.parse_opt() # 获取需要传入ai识别的参数
+            detected_file = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
+            detected_files = detected_files + detected_file
+            if detect_show:
+                show_images(source, detected_file) # 从备份文件中查看疑似非农化的图片
+            else:
+                    print('由参数控制，不展示识别到的图片')
         else:
-                print('由参数控制，不展示识别到的图片')
-    else:
-        detected_files = None
-        print('未发现今日图片，停止识别')
-    try:
-            shutil.rmtree(temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
-    except:
-            print(Exception.with_traceback, '这个报错有时出现，但是能正常执行')
+            detected_file = None
+            print('未发现今日图片，停止识别')
+        try:
+                shutil.rmtree(temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
+        except:
+                print(Exception.with_traceback, '这个报错有时出现，但是能正常执行')
+        print(detected_files)
     
     return detected_files
 

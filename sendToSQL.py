@@ -12,7 +12,7 @@ def init(db_host,db_user,db_pwd,db_database):
     cursor = db.cursor()
     return db, cursor
 
-# 数据列表
+# 数据格式初始化
 def dataInit(old_data):
     data = []
     for i in old_data:
@@ -49,7 +49,7 @@ def s2S(old_data):
     #数据库初始化
     db,cursor = init(**vars(dbopt))
     #数据处理
-    data = dataInit(cursor, old_data)
+    data = dataInit(old_data)
     #发送到数据库
     send(db, cursor, data)
 
