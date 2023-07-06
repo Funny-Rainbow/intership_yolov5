@@ -13,6 +13,7 @@ set_time 选择一天中的一个时间来运行文件
 source  照片源（应该为所有设备所在的路径）
 temp    创建一个暂时存储识别照片的文件夹，识别结束后会删除
 """
+
 source = r'H:\backup\files\jsy-camera\cameraCapture'
 temp = r'D:\Deep Learning\yolov5-master\my_temp\images'
 
@@ -102,3 +103,4 @@ if __name__ == '__main__':
     if detected_files:
         sendToSQL.s2S(detected_files)
         print(detected_files)
+    print("识别全部完成")

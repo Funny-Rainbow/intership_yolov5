@@ -13,21 +13,13 @@ def init(db_host,db_user,db_pwd,db_database):
     return db, cursor
 
 # 数据列表
-def dataInit(cursor, old_data):
-    cursor.execute('SELECT max(id) FROM cvdata')
-    max_id = cursor.fetchone()[0]
-    if max_id:
-        id = max_id
-    else:
-        id = 0
-    print(id,type(id))
+def dataInit(old_data):
     data = []
     for i in old_data:
-        id = id + 1
         confidence = i[1]
         now = datetime.datetime.now()
         device, name = i[0].split('_')
-        new_data = [id, now, device, name, confidence]
+        new_data = [now, device, name, confidence]
         data.append(new_data)
     
     return data
@@ -36,7 +28,7 @@ def send(db, cursor, data):
     try:
     # 执行SQL,插入多条数据
         print(data)
-        cursor.executemany("insert into cvdata(id,create_time, device, file_name, confidence) values (%s,%s,%s,%s,%s)", data)
+        cursor.executemany("insert into cvdata(create_time, device, file_name, confidence) values (%s,%s,%s,%s)", data)# id由数据库自动填充
 
         # 提交数据
         db.commit()
