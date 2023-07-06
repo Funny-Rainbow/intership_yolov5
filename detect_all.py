@@ -1,58 +1,3 @@
-# import os
-# import argparse
-# from time import sleep, localtime, time
-
-# import my_detect, sendToSQL
-# """
-# 参数
-# set_time 选择一天中的一个时间来运行文件
-# source  照片源（应该为所有设备所在的路径）
-# temp    创建一个暂时存储识别照片的文件夹，识别结束后会删除
-# """
-
-# def detect(all_source):
-#     dir_list = os.listdir(all_source)# 遍历设备
-#     print('总共有'+str(len(dir_list))+'个设备')
-#     detected_files = []
-#     startIndex = int(input('检测开始的设备索引(0为第一个):'))
-#     endIndex = int(input('检测结束的设备索引(-1为最后一个):'))
-#     for i in dir_list[startIndex:endIndex]:
-#         file_path = all_source + '\\' + str(i)
-#         opt = my_detect.parse_opt() # 获取需要传入ai识别的参数
-#         opt.temp = file_path
-#         detected_file = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
-#         if detected_file:
-#             for j in detected_file:
-#                 j[0] = rename(i, j[0])# 重命名
-#             detected_files = detected_files + detected_file
-#         print(detected_files)
-#     return detected_files #返回所有识别到的图片
-
-# def parse_opt():
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument('--all_source',  type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='root path of device')
-#     allopt, unknown = parser.parse_known_args()
-#     if unknown:
-#          print('Unknown in detect_all.py arguments:', unknown)
-#     return allopt
-
-# def rename(device,old_name):
-#      new_name = device + '_' + old_name
-#      return new_name
-
-
-# if __name__ == '__main__':  
-#     allopt = parse_opt()
-#     all_source = allopt.all_source
-#     detected_files = detect(all_source)
-#     if detected_files:
-#             print(detected_files)
-#             sendToSQL.s2S(detected_files)
-#     else:
-#          print('未发现非农化')
-
-
-
 import os
 import shutil
 import datetime
@@ -71,14 +16,15 @@ temp    创建一个暂时存储识别照片的文件夹，识别结束后会删
 source = r'H:\backup\files\jsy-camera\cameraCapture'
 temp = r'D:\Deep Learning\yolov5-master\my_temp\images'
 
-def copy_files(source, temp):
+def copy_files(source, temp, maxpic):
     dir_list = os.listdir(source)# 遍历设备
     # 遍历图片
     for i in dir_list:
         file_path = source + '\\' + str(i)
         file_list = os.listdir(file_path)
-        if len(file_list)>10:
-            s_list = random.sample(file_list,10)
+        # 控制每个设备所识别的最大图片数量
+        if len(file_list) > maxpic:
+            s_list = random.sample(file_list,maxpic)
         else:
             s_list = file_list
         for j in s_list:
@@ -88,7 +34,6 @@ def copy_files(source, temp):
             old_name = file_path + '\\' + j
             new_name = temp + '\\' + i + '_' + name + "." + fileType #文件夹名+文件名+格式
             shutil.copyfile(old_name, new_name)
-
 
 #显示识别到的疑似非农化照片
 def show_images(source, detected_files):
@@ -102,35 +47,32 @@ def show_images(source, detected_files):
           cv2.waitKey(0)
           cv2.destroyAllWindows()
 
-def main(set_date,set_time, source, temp, detect_show):
+def main(source, temp, detect_show, maxpic):
     # 只有设定的那一个小时才执行一次
-    if int(localtime(time())[3]) == set_time:
-        try:
-            os.mkdir(temp)
-        except:
-            print(Exception.args)
-        copy_files(set_date, set_time, source, temp) # 将今天的照片临时拷贝到同一目录下
-        tempDir = os.listdir(temp)
-        # 判断暂存文件夹内有无图片
-        print('找到了',len(tempDir),'张照片')
-        if len(tempDir):
-            opt = my_detect.parse_opt() # 获取需要传入ai识别的参数
-            detected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
-            if detect_show:
-                show_images(source, detected_files) # 从备份文件中查看疑似非农化的图片
-            else:
-                 print('由参数控制，不展示识别到的图片')
+    try:
+        os.mkdir(temp)
+    except:
+        print(Exception.args)
+    copy_files( source, temp, maxpic) # 将今天的照片临时拷贝到同一目录下
+    tempDir = os.listdir(temp)
+    # 判断暂存文件夹内有无图片
+    print('找到了',len(tempDir),'张照片')
+    if len(tempDir):
+        opt = my_detect.parse_opt() # 获取需要传入ai识别的参数
+        detected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
+        if detect_show:
+            show_images(source, detected_files) # 从备份文件中查看疑似非农化的图片
         else:
-            detected_files = None
-            print('未发现今日图片，停止识别')
-        try:
-                shutil.rmtree(temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
-        except:
-                print(Exception.with_traceback, '这个报错有时出现，但是能正常执行')
-        
-        return detected_files
+                print('由参数控制，不展示识别到的图片')
     else:
-         print('不在指定工作时间')
+        detected_files = None
+        print('未发现今日图片，停止识别')
+    try:
+            shutil.rmtree(temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
+    except:
+            print(Exception.with_traceback, '这个报错有时出现，但是能正常执行')
+    
+    return detected_files
 
 
 def parse_opt():
@@ -139,13 +81,12 @@ def parse_opt():
     today = ''
     today = str(today_splited[0])+str(today_splited[1]+str(today_splited[2])) #获取今天的日期
     #today = '20230622' #仅限测试使用
-    now = localtime(time())[3]
     parser = argparse.ArgumentParser()
-    args, unknown = parser.parse_known_args()
     parser.add_argument('--source', type=str, default= source, help='path of the device root(not photos root)')
     #parser.add_argument('--source', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
     parser.add_argument('--temp', type=str, default= temp, help='temprorarily create a folder to store photos')
     parser.add_argument('--detect_show', action='store_true', help='show the result or not')
+    parser.add_argument('--maxpic', type=int, default= 10, help='Maximum number of pictures to detect of each device')
     myopt, unknown = parser.parse_known_args()
     if unknown:
          print('Unknown in my_main.py arguments:', unknown)
