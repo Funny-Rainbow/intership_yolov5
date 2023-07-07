@@ -98,5 +98,6 @@ if __name__ == '__main__':
         if detected_files:
             sendToSQL.s2S(detected_files)
             print('识别到了：', len(detected_files),'张非农化照片')
+            sleep(60*60)
         print("休眠,现在时间", localtime(time())[3],"时")
-        sleep(60*60)
+        sleep(60*10)
