@@ -29,9 +29,11 @@ Usage - formats:
 """
 
 import argparse
+import logging
 import os
 import platform
 import sys
+from time import localtime, time
 from pathlib import Path
 
 import torch
@@ -154,11 +156,12 @@ def run(
             if len(det):
                 det_list = []
                 for o in det.tolist():
-                    det_list.append(o[4])
-                max_pro = max(det_list)                
-                detected_files.append([p.name,round(max_pro,2)])
+                    det_list.append(o[0:5])
+                detected_files.append([p.name, det_list])
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
+                #print('det',det.tolist())
+
 
                 # Print results
                 for c in det[:, 5].unique():
@@ -191,7 +194,7 @@ def run(
                 cv2.waitKey(1)  # 1 millisecond
 
             # Save results (image with detections)
-            if save_img:
+            if save_img and len(det):
                 if dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
                 else:  # 'video' or 'stream'
@@ -211,7 +214,6 @@ def run(
 
         # Print time (inference-only)
         LOGGER.info(f"{s}{'' if len(det) else '(no detections), '}{dt[1].dt * 1E3:.1f}ms")
-    return detected_files
     # Print results
     t = tuple(x.t / seen * 1E3 for x in dt)  # speeds per image
     LOGGER.info(f'Speed: %.1fms pre-process, %.1fms inference, %.1fms NMS per image at shape {(1, 3, *imgsz)}' % t)
@@ -225,9 +227,16 @@ def run(
 
 
 def parse_opt():
+    now = ''
+    for i in range(6):
+        temp_time = str(localtime(time())[i])
+        if i >0:
+            now = now + '-' + temp_time
+        else:
+            now = now + temp_time
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default=r"best.pt", help='model path or triton URL')
-    parser.add_argument('--temp', type=str, default= r'D:\Deep Learning\yolov5-master\my_temp\images', help='file/dir/URL/glob/screen/0(webcam)')
+    parser.add_argument('--temp', type=str, default= r'D:\Deep Learning\testimg', help='file/dir/URL/glob/screen/0(webcam)')
     #parser.add_argument('--temp', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
     parser.add_argument('--data', type=str, default='data/uc.yaml', help='(optional) dataset.yaml path')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
@@ -239,14 +248,14 @@ def parse_opt():
     parser.add_argument('--save-txt', action='store_true', help='save results to *.txt')
     parser.add_argument('--save-conf', action='store_true', help='save confidences in --save-txt labels')
     parser.add_argument('--save-crop', action='store_true', help='save cropped prediction boxes')
-    parser.add_argument('--nosave', action='store_false', help='do not save images/videos')
+    parser.add_argument('--nosave', action='store_true', help='do not save images/videos')
     parser.add_argument('--classes', nargs='+', type=int, help='filter by class: --classes 0, or --classes 0 2 3')
     parser.add_argument('--agnostic-nms', action='store_true', help='class-agnostic NMS')
     parser.add_argument('--augment', action='store_true', help='augmented inference')
     parser.add_argument('--visualize', action='store_true', help='visualize features')
     parser.add_argument('--update', action='store_true', help='update all models')
     parser.add_argument('--project', default=ROOT / 'runs/detect', help='save results to project/name')
-    parser.add_argument('--name', default='exp', help='save results to project/name')
+    parser.add_argument('--name', default=now, help='save results to project/name')
     parser.add_argument('--exist-ok', action='store_true', help='existing project/name ok, do not increment')
     parser.add_argument('--line-thickness', default=3, type=int, help='bounding box thickness (pixels)')
     parser.add_argument('--hide-labels', default=False, action='store_true', help='hide labels')
@@ -256,9 +265,8 @@ def parse_opt():
     parser.add_argument('--vid-stride', type=int, default=1, help='video frame-rate stride')
     opt, unknown = parser.parse_known_args()
     opt.imgsz *= 2 if len(opt.imgsz) == 1 else 1  # expand
-    print_args(vars(opt))
     if unknown:
-        print('Unknown in my_detect.py arguments:', unknown)
+        logging.debug('Unknown in my_detect.py arguments:', unknown)
     return opt
 
 def main(opt):
@@ -270,4 +278,4 @@ def main(opt):
 if __name__ == '__main__':
     opt = parse_opt()
     wow = main(opt)
-    print(wow)
+    logging.info(wow)

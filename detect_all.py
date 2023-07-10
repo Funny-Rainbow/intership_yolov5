@@ -4,6 +4,7 @@ import datetime
 import cv2
 import argparse
 import random
+import logging
 from time import sleep, localtime, time
 
 import my_detect, sendToSQL
@@ -36,7 +37,7 @@ def copy_files(source, temp, maxpic, dir_list):
 
 #显示识别到的疑似非农化照片
 def show_images(source, detected_files):
-     print("识别到",len(detected_files),"张疑似非农化照片")
+     logging.info("识别到",len(detected_files),"张疑似非农化照片")
      for i in range(len(detected_files)):
           id, filename = detected_files[i][0].split("_")
           url = source + "\\" + str(id) + "\\" + str(filename)

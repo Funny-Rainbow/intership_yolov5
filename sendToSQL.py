@@ -1,4 +1,5 @@
 import pymysql
+import logging
 import datetime
 import argparse
 # 数据库格式：
@@ -16,10 +17,10 @@ def init(db_host,db_user,db_pwd,db_database):
 def dataInit(old_data):
     data = []
     for i in old_data:
-        confidence = i[1]
+        file_name = i[0]
         now = datetime.datetime.now()
-        device, name = i[0].split('_')
-        new_data = [now, device, name, confidence]
+        file_data = str(i[1])
+        new_data = [now, file_name, file_data]
         data.append(new_data)
     
     return data
@@ -27,17 +28,16 @@ def dataInit(old_data):
 def send(db, cursor, data):
     try:
     # 执行SQL,插入多条数据
-        print(data)
-        cursor.executemany("insert into cvdata(create_time, device, file_name, confidence) values (%s,%s,%s,%s)", data)# id由数据库自动填充
+        cursor.executemany("insert into cv_data(create_time, file_name, detect_data) values (%s,%s,%s)", data)# id由数据库自动填充
 
         # 提交数据
         db.commit()
-        print('6')
+        logging.info('数据已成功写入数据库')
     
     except Exception as error:
         # 发生错误时回滚
         db.rollback()
-        print('database error occurs:',error)
+        logging.error('数据库发生错误，终止导入数据:',error)
 
     # 关闭数据库连接
     db.close()
@@ -60,14 +60,12 @@ def parse_opt():
     parser.add_argument('--db_user', type=str, default= 'root', help='database user')
     #parser.add_argument('--source', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
     parser.add_argument('--db_pwd', type=str, default= '##JmMyC2810', help='database password')
-    parser.add_argument('--db_database', type=str, default= 'cvtest', help='database name')
+    parser.add_argument('--db_database', type=str, default= 'cv_db', help='database name')
     dbopt, unknown = parser.parse_known_args()
     if unknown:
-         print('Unknown in sendToSQL.py arguments:', unknown)
+         logging.debug('Unknown in sendToSQL.py arguments:', unknown)
     return dbopt
 
 if __name__ == '__main__':
-    old_data = [
-    ("2c948099823b15ea018275d2e0926f7f_20230622092256.jpg", "0.80"),
-    ( "2c94809984a437180184d21c579043e8_20230622092744.jpg", "0.90"),]
+    old_data = [['20210903130602.jpg', [62.769989013671875, 10.444976806640625, 634.982177734375, 422.5649108886719, 0.8292975425720215]]]
     s2S(old_data)
