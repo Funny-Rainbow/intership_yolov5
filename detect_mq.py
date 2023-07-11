@@ -35,9 +35,9 @@ FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
 
 # 参数初始化
-def init():
+def init(mq_temp):
      try:
-          os.mkdir(ROOT / 'my_temp/images')
+          os.mkdir(mq_temp)
      except Exception as error:
           print(error)
 
@@ -53,7 +53,6 @@ def mq_test():
 # 处理消息队列数据
 def mq_data_init(mq_json, mq_temp):
      mq_list = json.loads(mq_json)
-     print(mq_list)
      for i in mq_list:
          file_name = i['name']
          base64_string = i['base64']
@@ -81,8 +80,8 @@ def local_save(temp_path, defult_path,save_path):
      shutil.copytree(defult_path, save_path)
      try:
         shutil.rmtree(defult_path) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
-     except:
-        logging.warning(Exception.with_traceback, '这个报错有时出现，但是能正常执行')
+     except Exception as error:
+        print(error, '这个报错有时出现，但是能正常执行')
 
 # 回信
 def mq_reply():
@@ -92,32 +91,37 @@ def mq_reply():
 def delete_temp(mq_temp):
      try:
         shutil.rmtree(mq_temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
-     except:
-        logging.warning(Exception.with_traceback, '这个报错有时出现，但是能正常执行')
+     except Exception as error:
+        print(error, '文件夹已被删除')
 
 # 创建参数
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mq_temp', type=str, default=ROOT / r"my_temp/images", help='temporarily store recieved imgs')
+    parser.add_argument('--mq_temp', type=str, default=ROOT / r"my_temp/mq_images", help='temporarily store recieved imgs')
     parser.add_argument('--save_path', type=str, default=ROOT / r"my_save", help='detected pictures save path')
     mq_opt, unknown = parser.parse_known_args()
     if unknown:
-        logging.debug('Unknown in my_detect.py arguments:', unknown)
+        log_temp = 'mq_Unknown in detected_mq.py arguments:', unknown
+        logging.debug(log_temp)
     return mq_opt
 
 
 # 主函数，循环监听
 def main():
      while True:
-          logging.info("正在运行mq线程")
-          init()
+          logging.info("mq_线程运行")
+          print('正在运行mq线程')
           mq_opt = parse_opt()
+          delete_temp(mq_opt.mq_temp)
+          init(mq_opt.mq_temp)
           #mq_receive()
           mq_data_init(mq_json, mq_opt.mq_temp)
           detected_files, undetected_files = recog(mq_opt.mq_temp) #ok
           #local_save(**vars(mq_opt)) 已经由my_detect.py完成
           sendToSQL.s2S(detected_files, undetected_files)# 发送给数据库 ok
           delete_temp(mq_opt.mq_temp)
+          logging.info("mq_线程休眠")
+          print('mq线程休眠')
           sleep(10)
           # mq_reply()
 

@@ -71,3 +71,6 @@ for i in my_dict:
     lists.append([i['id'],i['base64']])
 
 print(lists)
+
+import datetime
+print(datetime.date.today())

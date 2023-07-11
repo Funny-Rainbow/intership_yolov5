@@ -9,7 +9,7 @@ from time import sleep, localtime, time
 import my_detect, sendToSQL
 
 source = r'H:\backup\files\jsy-camera\cameraCapture'
-temp = r'my_temp/images'
+temp = r'my_temp/cycle_images'
 
 m = 6   #设置照片显示大小
 
@@ -36,7 +36,8 @@ def copy_files(set_date, set_time, source, temp):
 
 #显示识别到的疑似非农化照片
 def show_images(source, detected_files):
-     logging.info("识别到",len(detected_files),"张疑似非农化照片")
+     log_temp = "cycle_识别到",len(detected_files),"张疑似非农化照片"
+     logging.info(log_temp)
      for i in range(len(detected_files)):
           id, filename = detected_files[i][0].split("_")
           url = source + "\\" + str(id) + "\\" + str(filename)
@@ -50,13 +51,18 @@ def sub_main(set_date,set_time, source, temp):
     # 只有设定的那一个小时才执行一次
     if int(localtime(time())[3]) == set_time:
         try:
+            shutil.rmtree(temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
+        except Exception as error:
+            print(error, '文件夹已被删除')
+        try:
             os.mkdir(temp)
-        except:
-            logging.warning(Exception.args)
+        except Exception as error:
+            print(error)
         copy_files(set_date, set_time, source, temp) # 将今天的照片临时拷贝到同一目录下
         tempDir = os.listdir(temp)
         # 判断暂存文件夹内有无图片
-        logging.info('找到了',len(tempDir),'张照片')
+        log_temp = 'cycle_找到了',len(tempDir),'张照片'
+        logging.info(log_temp)
         if len(tempDir):
             opt = my_detect.parse_opt() # 获取需要传入ai识别的参数
             detected_files, undetected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
@@ -64,15 +70,16 @@ def sub_main(set_date,set_time, source, temp):
         else:
             detected_files = None
             undetected_files = None
-            logging.info('未发现今日图片，停止识别')
+            
+            logging.info('cycle_未发现今日图片，停止识别')
         try:
                 shutil.rmtree(temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
-        except:
-                logging.warning(Exception.with_traceback, '这个报错有时出现，但是能正常执行')
+        except Exception as error:
+                print(error, '文件夹已被删除')
         
         return detected_files,undetected_files
     else:
-         logging.info('不在指定工作时间')
+         logging.info('cycle_不在指定工作时间')
          return None,None
 
 
@@ -92,28 +99,35 @@ def parse_opt():
     parser.add_argument('--temp', type=str, default= temp, help='temprorarily create a folder to store photos')
     myopt, unknown = parser.parse_known_args()
     if unknown:
-         logging.warning('Unknown in detect_cycle.py arguments:', unknown)
+         print('Unknown in detect_cycle.py arguments:', unknown)
     return myopt
 
 
 def main():
     while True:
-        logging.info("正在运行cycle线程")
+        logging.info("cycle_线程运行")
+        print('正在运行cycle线程')
         myopt = parse_opt()
-        logging.debug('parameters:',myopt)
+        log_temp = 'cycle_parameters:',myopt
+        logging.debug(log_temp)
         detected_files, undetected_files = sub_main(**vars(myopt))
         # id,create_time, name, confidence
         if detected_files or undetected_files:
-            logging.info('undetected_files:', undetected_files, '\n', 'detected_files:', detected_files)
+            log_temp = 'cycle_undetected_files:', undetected_files, 'detected_files:', detected_files
+            logging.info(log_temp)
             sendToSQL.s2S(detected_files, undetected_files)
-            logging.info('在', len(undetected_files), '张照片中识别到了：', len(detected_files),'张非农化照片')
+            toatal = len(undetected_files)+len(detected_files)
+            log_temp = 'cycle_在', toatal, '张照片中识别到了：', len(detected_files),'张非农化照片'
+            logging.info(log_temp)
             print('在', len(undetected_files), '张照片中识别到了：', len(detected_files),'张非农化照片')
-            sleep(60*60)
         else:
              print('未找到照片')
-             logging.info('未找到照片')
-        logging.info("休眠,现在时间", localtime(time())[3],"时")
+             logging.info('cycle_未找到照片')
+        log_temp = "cycle_休眠,现在时间", localtime(time())[3],"时"
+        logging.info(log_temp)
         print("休眠,现在时间", localtime(time())[3],"时")
+        logging.info("cycle_线程休眠")
+        print('cycle线程休眠')
         sleep(60*60)
 
 if __name__ == '__main__':

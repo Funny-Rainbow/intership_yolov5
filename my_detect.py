@@ -55,7 +55,7 @@ from utils.torch_utils import select_device, smart_inference_mode
 @smart_inference_mode()
 def run(
         weights=r"best.pt",  # model path or triton URL
-        temp=ROOT/r'my_temp/images',  # file/dir/URL/glob/screen/0(webcam)
+        temp=ROOT/r'my_temp/cycle_images',  # file/dir/URL/glob/screen/0(webcam)
         data='data/uc.yaml',  # dataset.yaml path
         imgsz=(640, 640),  # inference size (height, width)
         conf_thres=0.25,  # confidence threshold
@@ -239,7 +239,7 @@ def parse_opt():
             now = now + temp_time
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default=ROOT / r"best.pt", help='model path or triton URL')
-    parser.add_argument('--temp', type=str, default= ROOT / r'my_temp/images', help='file/dir/URL/glob/screen/0(webcam)')
+    parser.add_argument('--temp', type=str, default= ROOT / r'my_temp/cycle_images', help='file/dir/URL/glob/screen/0(webcam)')
     #parser.add_argument('--temp', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
     parser.add_argument('--data', type=str, default='data/uc.yaml', help='(optional) dataset.yaml path')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
@@ -269,7 +269,8 @@ def parse_opt():
     opt, unknown = parser.parse_known_args()
     opt.imgsz *= 2 if len(opt.imgsz) == 1 else 1  # expand
     if unknown:
-        logging.debug('Unknown in my_detect.py arguments:', unknown)
+        log_temp = 'Unknown in my_detect.py arguments:', unknown
+        logging.debug(log_temp)
     return opt
 
 def main(opt):
@@ -281,4 +282,3 @@ def main(opt):
 if __name__ == '__main__':
     opt = parse_opt()
     wow = main(opt)
-    logging.info(wow)

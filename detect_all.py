@@ -36,7 +36,8 @@ def copy_files(source, temp, maxpic, dir_list):
 
 #显示识别到的疑似非农化照片
 def show_images(source, detected_files):
-     logging.info("识别到",len(detected_files),"张疑似非农化照片")
+     log_temp = "识别到",len(detected_files),"张疑似非农化照片"
+     logging.info(log_temp)
      for i in range(len(detected_files)):
           id, filename = detected_files[i][0].split("_")
           url = source + "\\" + str(id) + "\\" + str(filename)
