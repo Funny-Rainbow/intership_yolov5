@@ -54,8 +54,8 @@ from utils.torch_utils import select_device, smart_inference_mode
 
 @smart_inference_mode()
 def run(
-        weights=r"D:\Deep Learning\yolov5-master\runs\train\exp37\weights\best.pt",  # model path or triton URL
-        temp=r'D:\Deep Learning\yolov5-master\my_temp\images',  # file/dir/URL/glob/screen/0(webcam)
+        weights=r"best.pt",  # model path or triton URL
+        temp=ROOT/r'my_temp/images',  # file/dir/URL/glob/screen/0(webcam)
         data='data/uc.yaml',  # dataset.yaml path
         imgsz=(640, 640),  # inference size (height, width)
         conf_thres=0.25,  # confidence threshold
@@ -83,6 +83,7 @@ def run(
         vid_stride=1,  # video frame-rate stride
 ):
     detected_files = []
+    undetected_files = []
     temp = str(temp)
     save_img = not nosave and not temp.endswith('.txt')  # save inference images
     is_file = Path(temp).suffix[1:] in (IMG_FORMATS + VID_FORMATS)
@@ -182,6 +183,8 @@ def run(
                         annotator.box_label(xyxy, label, color=colors(c, True))
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
+            else:
+                undetected_files.append(p.name)
 
             # Stream results
             im0 = annotator.result()
@@ -223,7 +226,7 @@ def run(
     if update:
         strip_optimizer(weights[0])  # update model (to fix tempChangeWarning)
 
-    return detected_files
+    return detected_files, undetected_files
 
 
 def parse_opt():
@@ -235,8 +238,8 @@ def parse_opt():
         else:
             now = now + temp_time
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default=r"best.pt", help='model path or triton URL')
-    parser.add_argument('--temp', type=str, default= r'D:\Deep Learning\testimg', help='file/dir/URL/glob/screen/0(webcam)')
+    parser.add_argument('--weights', nargs='+', type=str, default=ROOT / r"best.pt", help='model path or triton URL')
+    parser.add_argument('--temp', type=str, default= ROOT / r'my_temp/images', help='file/dir/URL/glob/screen/0(webcam)')
     #parser.add_argument('--temp', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
     parser.add_argument('--data', type=str, default='data/uc.yaml', help='(optional) dataset.yaml path')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
@@ -271,8 +274,8 @@ def parse_opt():
 
 def main(opt):
     check_requirements(ROOT / 'requirements.txt', exclude=('tensorboard', 'thop'))
-    detected_files = run(**vars(opt))
-    return detected_files
+    detected_files, undetected_files = run(**vars(opt))
+    return detected_files, undetected_files
 
 
 if __name__ == '__main__':

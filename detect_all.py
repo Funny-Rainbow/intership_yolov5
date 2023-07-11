@@ -16,7 +16,7 @@ temp    创建一个暂时存储识别照片的文件夹，识别结束后会删
 """
 
 source = r'H:\backup\files\jsy-camera\cameraCapture'
-temp = r'D:\Deep Learning\yolov5-master\my_temp\images'
+temp = r'my_temp/images'
 
 def copy_files(source, temp, maxpic, dir_list):     
     file_path = source + '\\' + str(dir_list)

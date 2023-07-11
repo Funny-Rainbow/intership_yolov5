@@ -59,19 +59,21 @@ def sub_main(set_date,set_time, source, temp):
         logging.info('找到了',len(tempDir),'张照片')
         if len(tempDir):
             opt = my_detect.parse_opt() # 获取需要传入ai识别的参数
-            detected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
+            detected_files, undetected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
             #show_images(source, detected_files) # 从备份文件中查看疑似非农化的图片
         else:
             detected_files = None
+            undetected_files = None
             logging.info('未发现今日图片，停止识别')
         try:
                 shutil.rmtree(temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
         except:
                 logging.warning(Exception.with_traceback, '这个报错有时出现，但是能正常执行')
         
-        return detected_files
+        return detected_files,undetected_files
     else:
          logging.info('不在指定工作时间')
+         return None,None
 
 
 def parse_opt():
@@ -99,14 +101,19 @@ def main():
         logging.info("正在运行cycle线程")
         myopt = parse_opt()
         logging.debug('parameters:',myopt)
-        detected_files = sub_main(**vars(myopt))
+        detected_files, undetected_files = sub_main(**vars(myopt))
         # id,create_time, name, confidence
-        if detected_files:
-            print(detected_files)
-            sendToSQL.s2S(detected_files)
-            logging.info('识别到了：', len(detected_files),'张非农化照片')
+        if detected_files or undetected_files:
+            logging.info('undetected_files:', undetected_files, '\n', 'detected_files:', detected_files)
+            sendToSQL.s2S(detected_files, undetected_files)
+            logging.info('在', len(undetected_files), '张照片中识别到了：', len(detected_files),'张非农化照片')
+            print('在', len(undetected_files), '张照片中识别到了：', len(detected_files),'张非农化照片')
             sleep(60*60)
+        else:
+             print('未找到照片')
+             logging.info('未找到照片')
         logging.info("休眠,现在时间", localtime(time())[3],"时")
+        print("休眠,现在时间", localtime(time())[3],"时")
         sleep(60*60)
 
 if __name__ == '__main__':

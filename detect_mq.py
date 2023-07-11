@@ -54,8 +54,8 @@ def recog(mq_temp):
     opt.temp = ROOT / mq_temp
     print(opt.temp)
     print(vars(opt))
-    detected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
-    return detected_files
+    detected_files, undetected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
+    return detected_files, undetected_files
 
 # 本地保存（已在my_detect.py实现）
 def local_save(temp_path, defult_path,save_path):
@@ -91,12 +91,13 @@ def parse_opt():
 def main():
      while True:
           logging.info("正在运行mq线程")
+          init()
           mq_opt = parse_opt()
           mq_receive()
           mq_data_init()
-          detected_files = recog(mq_opt.mq_temp) #ok
+          detected_files, undetected_files = recog(mq_opt.mq_temp) #ok
           #local_save(**vars(mq_opt)) 已经由my_detect.py完成
-          sendToSQL.s2S(detected_files)# 发送给数据库 ok
+          sendToSQL.s2S(detected_files, undetected_files)# 发送给数据库 ok
           delete_temp(mq_opt.mq_temp)
           sleep(1)
           # mq_reply()

@@ -14,42 +14,50 @@ def init(db_host,db_user,db_pwd,db_database):
     return db, cursor
 
 # 数据格式初始化
-def dataInit(old_data):
-    data = []
-    for i in old_data:
-        file_name = i[0]
-        now = datetime.datetime.now()
-        file_data = str(i[1])
-        new_data = [now, file_name, file_data]
-        data.append(new_data)
-    
-    return data
+def dataInit(detected_files, undetected_files):
+    de_data = []
+    un_data = []
+    now = datetime.datetime.now()
+    if detected_files:
+        for i in detected_files:
+            de_file_name = i[0]
+            file_data = str(i[1])
+            new_data = [now, de_file_name, file_data, 1]
+            de_data.append(new_data)
+    if undetected_files:
+        for j in undetected_files:
+            un_file_name = j
+            new_un_data = [now, un_file_name, [0], 0]
+            un_data.append(new_un_data)
+    return de_data + un_data
 
 def send(db, cursor, data):
     try:
     # 执行SQL,插入多条数据
-        cursor.executemany("insert into cv_data(create_time, file_name, detect_data) values (%s,%s,%s)", data)# id由数据库自动填充
+        cursor.executemany("insert into cv_data(create_time, file_name, detect_data, non_argric) values (%s,%s,%s,%s)", data)# id由数据库自动填充
 
         # 提交数据
         db.commit()
         logging.info('数据已成功写入数据库')
+        print('数据已成功写入数据库')
     
     except Exception as error:
         # 发生错误时回滚
         db.rollback()
         logging.error('数据库发生错误，终止导入数据:',error)
+        print('数据库发生错误，终止导入数据:',error)
 
     # 关闭数据库连接
     db.close()
 
 # 主函数  
-def s2S(old_data):
+def s2S(detected_files, undetected_files):
     #获取参数
     dbopt = parse_opt()
     #数据库初始化
     db,cursor = init(**vars(dbopt))
     #数据处理
-    data = dataInit(old_data)
+    data = dataInit(detected_files, undetected_files)
     #发送到数据库
     send(db, cursor, data)
 
@@ -67,5 +75,5 @@ def parse_opt():
     return dbopt
 
 if __name__ == '__main__':
-    old_data = [['20210903130602.jpg', [62.769989013671875, 10.444976806640625, 634.982177734375, 422.5649108886719, 0.8292975425720215]]]
-    s2S(old_data)
+    old_data = [['20210903130602.jpg', [62.769989013671875, 10.444976806640625, 634.982177734375, 422.5649108886719, 0.8292975425720215],1]]
+    s2S(old_data,None)
