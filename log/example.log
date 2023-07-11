@@ -266,3 +266,31 @@ INFO:root:正在运行mq线程
 07/11 11:02:42-root-INFO-main-正在运行mq线程
 07/11 11:02:44-root-INFO-send-数据已成功写入数据库
 07/11 11:02:45-root-INFO-main-正在运行mq线程
+07/11 14:26:26-root-INFO-main-正在运行cycle线程
+07/11 14:26:26-root-INFO-main-正在运行mq线程
+07/11 14:26:26-root-WARNING-sub_main-<attribute 'args' of 'BaseException' objects>
+07/11 14:26:56-root-INFO-send-数据已成功写入数据库
+07/11 14:26:57-root-INFO-send-数据已成功写入数据库
+07/11 14:27:06-root-INFO-main-正在运行mq线程
+07/11 14:27:08-root-INFO-send-数据已成功写入数据库
+07/11 14:27:18-root-INFO-main-正在运行mq线程
+07/11 14:27:19-root-INFO-send-数据已成功写入数据库
+07/11 14:27:29-root-INFO-main-正在运行mq线程
+07/11 14:27:30-root-INFO-send-数据已成功写入数据库
+07/11 14:27:40-root-INFO-main-正在运行mq线程
+07/11 14:27:41-root-INFO-send-数据已成功写入数据库
+07/11 14:27:51-root-INFO-main-正在运行mq线程
+07/11 14:27:52-root-INFO-send-数据已成功写入数据库
+07/11 14:28:02-root-INFO-main-正在运行mq线程
+07/11 14:28:04-root-INFO-send-数据已成功写入数据库
+07/11 14:28:14-root-INFO-main-正在运行mq线程
+07/11 14:28:15-root-INFO-send-数据已成功写入数据库
+07/11 14:28:25-root-INFO-main-正在运行mq线程
+07/11 14:28:26-root-INFO-send-数据已成功写入数据库
+07/11 14:28:36-root-INFO-main-正在运行mq线程
+07/11 14:28:37-root-INFO-send-数据已成功写入数据库
+07/11 14:28:47-root-INFO-main-正在运行mq线程
+07/11 14:28:48-root-INFO-send-数据已成功写入数据库
+07/11 15:13:04-root-INFO-main-正在运行cycle线程
+07/11 15:13:04-root-INFO-main-正在运行mq线程
+07/11 15:13:04-root-WARNING-sub_main-<attribute 'args' of 'BaseException' objects>
