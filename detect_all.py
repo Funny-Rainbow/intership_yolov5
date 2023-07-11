@@ -18,22 +18,21 @@ temp    创建一个暂时存储识别照片的文件夹，识别结束后会删
 source = r'H:\backup\files\jsy-camera\cameraCapture'
 temp = r'D:\Deep Learning\yolov5-master\my_temp\images'
 
-def copy_files(source, temp, maxpic, dir_list):
-        
-        file_path = source + '\\' + str(dir_list)
-        file_list = os.listdir(file_path)
-        # 控制每个设备所识别的最大图片数量
-        if len(file_list) > maxpic:
-            s_list = random.sample(file_list,maxpic)
-        else:
-            s_list = file_list
-        for j in s_list:
-            hello, fileType = j.rsplit('.')
-            name, suffix = j.rsplit('.' + fileType)
-            name = name.replace('.', '')
-            old_name = file_path + '\\' + j
-            new_name = temp + '\\' + dir_list + '_' + name + "." + fileType #文件夹名+文件名+格式
-            shutil.copyfile(old_name, new_name)
+def copy_files(source, temp, maxpic, dir_list):     
+    file_path = source + '\\' + str(dir_list)
+    file_list = os.listdir(file_path)
+    # 控制每个设备所识别的最大图片数量
+    if len(file_list) > maxpic:
+        s_list = random.sample(file_list,maxpic)
+    else:
+        s_list = file_list
+    for j in s_list:
+        hello, fileType = j.rsplit('.')
+        name, suffix = j.rsplit('.' + fileType)
+        name = name.replace('.', '')
+        old_name = file_path + '\\' + j
+        new_name = temp + '\\' + dir_list + '_' + name + "." + fileType #文件夹名+文件名+格式
+        shutil.copyfile(old_name, new_name)
 
 #显示识别到的疑似非农化照片
 def show_images(source, detected_files):

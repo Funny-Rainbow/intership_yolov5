@@ -9,25 +9,28 @@ from time import sleep, localtime, time
 import my_detect, sendToSQL
 
 source = r'H:\backup\files\jsy-camera\cameraCapture'
-temp = r'D:\Deep Learning\yolov5-master\my_temp\images'
+temp = r'my_temp/images'
 
 m = 6   #设置照片显示大小
 
 def copy_files(set_date, set_time, source, temp):
     dir_list = os.listdir(source)# 遍历设备
+    file_list = []
+    for path_name, dir, files_name in os.walk(source):
+        for file in files_name:
+            file_list.append(os.path.join(path_name, file))
     # 遍历图片
-    for i in dir_list:
-        file_path = source + '\\' + str(i)
-        file_list = os.listdir(file_path)
-        for j in file_list:
+        for j in files_name:
+            f_name,f_type = j.split('.')
             # 只复制每天09:00和14:00拍摄的图片
             time_ok = j[8:10] == '09' or j[8:10] == '14'
-            if j[0:8] == set_date and time_ok:
+            type_of = f_type == 'jpg' or f_type == 'jpeg' or f_type == 'png'
+            if j[0:8] == set_date and time_ok and f_type == 'jpg':
                 _, fileType = j.rsplit('.')
                 name, _ = j.rsplit('.' + fileType)
                 name = name.replace('.', '')
-                old_name = file_path + '\\' + j
-                new_name = temp + '\\' + i + '_' + name + "." + fileType #文件夹名+文件名+格式
+                old_name = path_name + '\\' + j
+                new_name = temp + '\\' + name + "." + fileType #文件夹名+文件名+格式
                 shutil.copyfile(old_name, new_name)
 
 
@@ -57,7 +60,7 @@ def sub_main(set_date,set_time, source, temp):
         if len(tempDir):
             opt = my_detect.parse_opt() # 获取需要传入ai识别的参数
             detected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
-            show_images(source, detected_files) # 从备份文件中查看疑似非农化的图片
+            #show_images(source, detected_files) # 从备份文件中查看疑似非农化的图片
         else:
             detected_files = None
             logging.info('未发现今日图片，停止识别')
@@ -76,7 +79,7 @@ def parse_opt():
     today_splited = today.split('-')# 分离年月日
     today = ''
     today = str(today_splited[0])+str(today_splited[1]+str(today_splited[2])) #获取今天的日期
-    #today = '20230622' #仅限测试使用
+    today = '20230622' #仅限测试使用
     #now = localtime(time())[3]
     parser = argparse.ArgumentParser()
     args, unknown = parser.parse_known_args()
@@ -99,6 +102,7 @@ def main():
         detected_files = sub_main(**vars(myopt))
         # id,create_time, name, confidence
         if detected_files:
+            print(detected_files)
             sendToSQL.s2S(detected_files)
             logging.info('识别到了：', len(detected_files),'张非农化照片')
             sleep(60*60)

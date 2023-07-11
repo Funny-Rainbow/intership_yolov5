@@ -31,12 +31,17 @@
 
 import os
 
-def find_dir(dir_name):
-    file_list = []
-    for path_name, dir, files_name in os.walk(dir_name):
-        for file in files_name:
-            file_list.append(os.path.join(path_name, file))
-    return file_list
+# def find_dir(dir_name):
+#     file_list = []
+#     for path_name, dir, files_name in os.walk(dir_name):
+#         print('path_name:',path_name, 'dir:',dir,'files_name:', files_name)
+#         for file in files_name:
+#             print(file)
+#             file_list.append(os.path.join(path_name, file))
+#     return file_list
 
-file_list = find_dir(os.getcwd())
-print(file_list)
+# file_list = find_dir(r'D:\Deep Learning\yolo-server-test\device')
+# print(file_list[0])
+
+from time import localtime,time
+print(localtime())
