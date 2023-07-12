@@ -1,5 +1,5 @@
 import detect_cycle,detect_mq,logging,shutil
-from threading import Thread, current_thread
+from threading import Thread
 import datetime
 
 """

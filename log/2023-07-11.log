@@ -630,3 +630,15 @@
 07/11 17:10:54-root-DEBUG-parse_opt-('Unknown in my_detect.py arguments:', ['--set_time', '17'])
 07/11 17:10:55-root-INFO-send-数据已成功写入数据库
 07/11 17:10:55-root-INFO-main-mq_线程休眠
+07/11 17:24:08-root-INFO-main-cycle_线程运行
+07/11 17:24:08-root-INFO-main-mq_线程运行
+07/11 17:24:08-root-DEBUG-main-('cycle_parameters:', Namespace(set_date='20230622', set_time=23, source='H:\\backup\\files\\jsy-camera\\cameraCapture', temp='my_temp/cycle_images'))
+07/11 17:24:08-root-INFO-sub_main-cycle_不在指定工作时间
+07/11 17:24:08-root-INFO-main-cycle_未找到照片
+07/11 17:24:08-root-INFO-main-('cycle_休眠,现在时间', 17, '时')
+07/11 17:24:08-root-INFO-main-cycle_线程休眠
+07/11 17:24:12-root-INFO-send-数据已成功写入数据库
+07/11 17:24:12-root-INFO-main-mq_线程休眠
+07/11 17:24:22-root-INFO-main-mq_线程运行
+07/11 17:24:24-root-INFO-send-数据已成功写入数据库
+07/11 17:24:24-root-INFO-main-mq_线程休眠
