@@ -238,7 +238,7 @@ def parse_opt():
         else:
             now = now + temp_time
     parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default=ROOT / r"best.pt", help='model path or triton URL')
+    parser.add_argument('--weights', nargs='+', type=str, default=ROOT / r"best_v2.pt", help='model path or triton URL')
     parser.add_argument('--temp', type=str, default= ROOT / r'my_temp/cycle_images', help='file/dir/URL/glob/screen/0(webcam)')
     #parser.add_argument('--temp', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
     parser.add_argument('--data', type=str, default='data/uc.yaml', help='(optional) dataset.yaml path')

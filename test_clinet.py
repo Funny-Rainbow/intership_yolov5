@@ -10,6 +10,7 @@ channel = connection.channel()
 def callback(ch, method, properties, body):
     print('[x] Received %r' % body)
 
+def main():
 # 5. 接收来自指定queue的消息
 channel.basic_consume(
     queue='hello',  # 接收指定queue的消息

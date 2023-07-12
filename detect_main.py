@@ -1,4 +1,4 @@
-import detect_cycle,detect_mq,logging,shutil
+import detect_cycle,detect_mq,logging
 from threading import Thread
 import datetime
 
