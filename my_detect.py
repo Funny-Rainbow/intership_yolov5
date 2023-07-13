@@ -155,10 +155,16 @@ def run(
             imc = im0.copy() if save_crop else im0  # for save_crop
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
             if len(det):
+                det_dict = {'xyxy':'','confid':''}
                 det_list = []
                 for o in det.tolist():
-                    det_list.append(o[0:5])
+                    for o1 in range(6):
+                        o[o1] = round(o[o1],4)
+                    det_dict['xyxy']=str(o[0:4])
+                    det_dict['confid']=str(o[4])
+                    det_list.append(det_dict)
                 detected_files.append([p.name, det_list])
+                print(detected_files)
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
                 #print('det',det.tolist())
