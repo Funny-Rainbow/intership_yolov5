@@ -15,8 +15,8 @@ log_name = 'D:\Deep Learning\\yolov5-server_v2\\log\\' +now + '.'+'log'
 def main():
     #创建LOG文件并开始记录
     logging.basicConfig(filename= log_name, 
-                        level=logging.DEBUG, 
-                        format='%(asctime)s-%(name)s-%(levelname)s-%(funcName)s-%(message)s',
+                        level=logging.INFO, 
+                        format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',
                         datefmt='%m/%d %H:%M:%S',)
 
     # 创建线程

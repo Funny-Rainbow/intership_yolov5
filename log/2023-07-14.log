@@ -1,0 +1,138 @@
+07/14 13:49:12-root-INFO - cycle_线程运行
+07/14 13:49:12-root-INFO - mq_线程运行
+07/14 13:49:12-root-INFO - cycle_不在指定工作时间
+07/14 13:49:12-root-INFO - cycle_未找到照片
+07/14 13:49:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:49:12-root-INFO - cycle_线程休眠
+07/14 13:49:12-pika.adapters.blocking_connection-INFO - Created channel=1
+07/14 13:49:12-root-INFO - [*] 正在等待消息队列数据
+07/14 13:50:12-root-INFO - cycle_线程运行
+07/14 13:50:12-root-INFO - cycle_不在指定工作时间
+07/14 13:50:12-root-INFO - cycle_未找到照片
+07/14 13:50:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:50:12-root-INFO - cycle_线程休眠
+07/14 13:51:12-root-INFO - cycle_线程运行
+07/14 13:51:12-root-INFO - cycle_不在指定工作时间
+07/14 13:51:12-root-INFO - cycle_未找到照片
+07/14 13:51:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:51:12-root-INFO - cycle_线程休眠
+07/14 13:52:12-root-INFO - cycle_线程运行
+07/14 13:52:12-root-INFO - cycle_不在指定工作时间
+07/14 13:52:12-root-INFO - cycle_未找到照片
+07/14 13:52:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:52:12-root-INFO - cycle_线程休眠
+07/14 13:53:12-root-INFO - cycle_线程运行
+07/14 13:53:12-root-INFO - cycle_不在指定工作时间
+07/14 13:53:12-root-INFO - cycle_未找到照片
+07/14 13:53:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:53:12-root-INFO - cycle_线程休眠
+07/14 13:54:12-root-INFO - cycle_线程运行
+07/14 13:54:12-root-INFO - cycle_不在指定工作时间
+07/14 13:54:12-root-INFO - cycle_未找到照片
+07/14 13:54:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:54:12-root-INFO - cycle_线程休眠
+07/14 13:55:12-root-INFO - cycle_线程运行
+07/14 13:55:12-root-INFO - cycle_不在指定工作时间
+07/14 13:55:12-root-INFO - cycle_未找到照片
+07/14 13:55:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:55:12-root-INFO - cycle_线程休眠
+07/14 13:55:57-root-INFO - [^]消息队列收到消息
+07/14 13:55:57-root-INFO - mq_接收到132482张图片
+07/14 13:55:57-pika.channel-INFO - Closing channel (0): 'Normal shutdown' on <Channel number=1 OPEN conn=<SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001E62BA2BA60> params=<ConnectionParameters host=127.0.0.1 port=5672 virtual_host=/ ssl=False>>>
+07/14 13:55:57-pika.channel-INFO - Received <Channel.CloseOk> on <Channel number=1 CLOSING conn=<SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001E62BA2BA60> params=<ConnectionParameters host=127.0.0.1 port=5672 virtual_host=/ ssl=False>>>
+07/14 13:56:02-root-INFO - mq_在2张照片中识别到1张疑似非农化照片
+07/14 13:56:02-root-INFO - 数据已成功写入数据库
+07/14 13:56:02-root-INFO - mq_线程休眠
+07/14 13:56:03-root-INFO - mq_线程运行
+07/14 13:56:03-pika.adapters.blocking_connection-INFO - Created channel=1
+07/14 13:56:03-root-INFO - [*] 正在等待消息队列数据
+07/14 13:56:12-root-INFO - cycle_线程运行
+07/14 13:56:12-root-INFO - cycle_不在指定工作时间
+07/14 13:56:12-root-INFO - cycle_未找到照片
+07/14 13:56:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:56:12-root-INFO - cycle_线程休眠
+07/14 13:56:13-root-INFO - [^]消息队列收到消息
+07/14 13:56:13-root-INFO - mq_接收到132482张图片
+07/14 13:56:13-pika.channel-INFO - Closing channel (0): 'Normal shutdown' on <Channel number=1 OPEN conn=<SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001E62BA2BA60> params=<ConnectionParameters host=127.0.0.1 port=5672 virtual_host=/ ssl=False>>>
+07/14 13:56:13-pika.channel-INFO - Received <Channel.CloseOk> on <Channel number=1 CLOSING conn=<SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001E62BA2BA60> params=<ConnectionParameters host=127.0.0.1 port=5672 virtual_host=/ ssl=False>>>
+07/14 13:56:15-root-INFO - mq_在2张照片中识别到1张疑似非农化照片
+07/14 13:56:15-root-INFO - 数据已成功写入数据库
+07/14 13:56:15-root-INFO - mq_线程休眠
+07/14 13:56:16-root-INFO - mq_线程运行
+07/14 13:56:16-pika.adapters.blocking_connection-INFO - Created channel=1
+07/14 13:56:16-root-INFO - [*] 正在等待消息队列数据
+07/14 13:56:16-root-INFO - [^]消息队列收到消息
+07/14 13:56:16-root-INFO - mq_接收到132482张图片
+07/14 13:56:16-pika.channel-INFO - Closing channel (0): 'Normal shutdown' on <Channel number=1 OPEN conn=<SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001E62BA2BA60> params=<ConnectionParameters host=127.0.0.1 port=5672 virtual_host=/ ssl=False>>>
+07/14 13:56:16-pika.channel-INFO - Received <Channel.CloseOk> on <Channel number=1 CLOSING conn=<SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001E62BA2BA60> params=<ConnectionParameters host=127.0.0.1 port=5672 virtual_host=/ ssl=False>>>
+07/14 13:56:17-root-INFO - mq_在2张照片中识别到1张疑似非农化照片
+07/14 13:56:17-root-INFO - 数据已成功写入数据库
+07/14 13:56:17-root-INFO - mq_线程休眠
+07/14 13:56:18-root-INFO - mq_线程运行
+07/14 13:56:18-pika.adapters.blocking_connection-INFO - Created channel=1
+07/14 13:56:18-root-INFO - [*] 正在等待消息队列数据
+07/14 13:57:12-root-INFO - cycle_线程运行
+07/14 13:57:12-root-INFO - cycle_不在指定工作时间
+07/14 13:57:12-root-INFO - cycle_未找到照片
+07/14 13:57:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:57:12-root-INFO - cycle_线程休眠
+07/14 13:58:12-root-INFO - cycle_线程运行
+07/14 13:58:12-root-INFO - cycle_不在指定工作时间
+07/14 13:58:12-root-INFO - cycle_未找到照片
+07/14 13:58:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:58:12-root-INFO - cycle_线程休眠
+07/14 13:59:12-root-INFO - cycle_线程运行
+07/14 13:59:12-root-INFO - cycle_不在指定工作时间
+07/14 13:59:12-root-INFO - cycle_未找到照片
+07/14 13:59:12-root-INFO - ('cycle_休眠,现在时间', 13, '时')
+07/14 13:59:12-root-INFO - cycle_线程休眠
+07/14 14:00:12-root-INFO - cycle_线程运行
+07/14 14:00:12-root-INFO - cycle_不在指定工作时间
+07/14 14:00:12-root-INFO - cycle_未找到照片
+07/14 14:00:12-root-INFO - ('cycle_休眠,现在时间', 14, '时')
+07/14 14:00:12-root-INFO - cycle_线程休眠
+07/14 14:01:12-root-INFO - cycle_线程运行
+07/14 14:01:12-root-INFO - cycle_不在指定工作时间
+07/14 14:01:12-root-INFO - cycle_未找到照片
+07/14 14:01:12-root-INFO - ('cycle_休眠,现在时间', 14, '时')
+07/14 14:01:12-root-INFO - cycle_线程休眠
+07/14 14:02:12-root-INFO - cycle_线程运行
+07/14 14:02:12-root-INFO - cycle_不在指定工作时间
+07/14 14:02:12-root-INFO - cycle_未找到照片
+07/14 14:02:12-root-INFO - ('cycle_休眠,现在时间', 14, '时')
+07/14 14:02:12-root-INFO - cycle_线程休眠
+07/14 14:03:12-root-INFO - cycle_线程运行
+07/14 14:03:12-root-INFO - cycle_不在指定工作时间
+07/14 14:03:12-root-INFO - cycle_未找到照片
+07/14 14:03:12-root-INFO - ('cycle_休眠,现在时间', 14, '时')
+07/14 14:03:12-root-INFO - cycle_线程休眠
+07/14 14:04:12-root-INFO - cycle_线程运行
+07/14 14:04:12-root-INFO - cycle_不在指定工作时间
+07/14 14:04:12-root-INFO - cycle_未找到照片
+07/14 14:04:12-root-INFO - ('cycle_休眠,现在时间', 14, '时')
+07/14 14:04:12-root-INFO - cycle_线程休眠
+07/14 14:05:12-root-INFO - cycle_线程运行
+07/14 14:05:12-root-INFO - cycle_不在指定工作时间
+07/14 14:05:12-root-INFO - cycle_未找到照片
+07/14 14:05:12-root-INFO - ('cycle_休眠,现在时间', 14, '时')
+07/14 14:05:12-root-INFO - cycle_线程休眠
+07/14 14:06:12-root-INFO - cycle_线程运行
+07/14 14:06:12-root-INFO - cycle_不在指定工作时间
+07/14 14:06:12-root-INFO - cycle_未找到照片
+07/14 14:06:12-root-INFO - ('cycle_休眠,现在时间', 14, '时')
+07/14 14:06:12-root-INFO - cycle_线程休眠
+07/14 14:07:12-root-INFO - cycle_线程运行
+07/14 14:07:12-root-INFO - cycle_不在指定工作时间
+07/14 14:07:12-root-INFO - cycle_未找到照片
+07/14 14:07:12-root-INFO - ('cycle_休眠,现在时间', 14, '时')
+07/14 14:07:12-root-INFO - cycle_线程休眠
+07/14 14:08:12-root-INFO - cycle_线程运行
+07/14 14:08:12-root-INFO - cycle_不在指定工作时间
+07/14 14:08:12-root-INFO - cycle_未找到照片
+07/14 14:08:12-root-INFO - ('cycle_休眠,现在时间', 14, '时')
+07/14 14:08:12-root-INFO - cycle_线程休眠
+07/14 14:09:12-root-INFO - cycle_线程运行
+07/14 14:09:12-root-INFO - cycle_不在指定工作时间
+07/14 14:09:12-root-INFO - cycle_未找到照片
+07/14 14:09:12-root-INFO - ('cycle_休眠,现在时间', 14, '时')
+07/14 14:09:12-root-INFO - cycle_线程休眠
