@@ -4,12 +4,21 @@ import datetime
 import cv2
 import argparse
 import logging
+import sys
+from pathlib import Path
 from time import sleep, localtime, time
 
 import my_detect, sendToSQL
 
 source = r'H:\backup\files\jsy-camera\cameraCapture'
 cycle_temp = r'my_temp/cycle_images'
+
+
+FILE = Path(__file__).resolve()
+ROOT = FILE.parents[0]  # YOLOv5 root directory
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))  # add ROOT to PATH
+ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 m = 6   #设置照片显示大小
 
@@ -69,7 +78,7 @@ def recog(set_date,set_time, source, cycle_temp):
         logging.info(log_temp)
         if len(tempDir):
             opt = my_detect.parse_opt() # 获取需要传入ai识别的参数
-            opt.temp = cycle_temp
+            opt.temp = cycle_temp # 传入cycle的缓存路径
             detected_files, undetected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
             #show_images(source, detected_files) # 从备份文件中查看疑似非农化的图片
         else:
@@ -145,7 +154,7 @@ def main():
         sleep(60)# 多线程，不可删sleep
 
 if __name__ == '__main__':
-     log_name = 'D:\Deep Learning\\yolov5-server_v2\\log\\' + 'cycle_test' + '.'+'log'
+     log_name = ROOT / 'log/cycle_test.log'
      logging.basicConfig(filename= log_name, 
                         level=logging.DEBUG, 
                         format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',

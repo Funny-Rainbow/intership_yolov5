@@ -1,3 +1,4 @@
+import sys
 import os
 import shutil
 import argparse
@@ -18,6 +19,10 @@ global channel
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))  # add ROOT to PATH
+ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
+
 
 # 参数初始化
 def init():
@@ -114,7 +119,7 @@ def main():
           sleep(1)       #多线程需要sleep
 
 if __name__ == '__main__':
-    log_name = 'D:\Deep Learning\\yolov5-server_v2\\log\\' + 'mq_test' + '.'+'log'
+    log_name = ROOT / 'log/mq_test.log'
     logging.basicConfig(filename= log_name, 
                         level=logging.DEBUG, 
                         format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',
