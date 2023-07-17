@@ -101,7 +101,7 @@ def parse_opt():
     parser.add_argument('--set_time',  type=int, default= 23, help='choose when does the process run')
     parser.add_argument('--source', type=str, default= source, help='path of the device root(not photos root)')
     #parser.add_argument('--source', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
-    parser.add_argument('--temp', type=str, default= temp, help='temprorarily create a folder to store photos')
+    parser.add_argument('--cycle_temp', type=str, default= temp, help='temprorarily create a folder to store photos')
     myopt, unknown = parser.parse_known_args()
     if unknown:
          print('Unknown in detect_cycle.py arguments:', unknown)

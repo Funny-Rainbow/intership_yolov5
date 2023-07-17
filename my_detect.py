@@ -26,6 +26,10 @@ Usage - formats:
                                  yolov5s.tflite             # TensorFlow Lite
                                  yolov5s_edgetpu.tflite     # TensorFlow Edge TPU
                                  yolov5s_paddle_model       # PaddlePaddle
+
+
+此文件基于原yolo detect.py文件修改而成，在原用于识别的函数内增加了 返回识别结果的功能。具体搜索detected_files和undetected_files查看相关语句
+同时，一些默认参数设置也进行了修改
 """
 
 import argparse
