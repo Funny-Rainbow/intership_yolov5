@@ -11,7 +11,7 @@ rabbitMQ 格式是怎样的？
 """
 
 now = str(datetime.date.today())
-log_name = 'D:\Deep Learning\\yolov5-server_v2\\log\\' +now + '.'+'log'
+log_name = 'D:\Deep Learning\\yolov5-server_v2\\log\\' + now + '.'+'log'
 def main():
     #创建LOG文件并开始记录
     logging.basicConfig(filename= log_name, 

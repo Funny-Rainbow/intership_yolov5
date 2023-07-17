@@ -159,13 +159,13 @@ def run(
             imc = im0.copy() if save_crop else im0  # for save_crop
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
             if len(det):
-                det_dict = {'xyxy':'','confid':''}
+                det_dict = {'xyxy':'','cfd':''}
                 det_list = []
                 for o in det.tolist():
                     for o1 in range(6):
                         o[o1] = round(o[o1],4)
-                    det_dict['xyxy']=str(o[0:4])
-                    det_dict['confid']=str(o[4])
+                    det_dict['xyxy']=o[0:4]
+                    det_dict['cfd']=o[4]
                     det_list.append(det_dict)
                 detected_files.append([p.name, det_list])
                 print(detected_files)
@@ -190,6 +190,8 @@ def run(
                     if save_img or save_crop or view_img:  # Add bbox to image
                         c = int(cls)  # integer class
                         label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
+                        #label = None if hide_labels else (names[c] if hide_conf else f"{'uc'} {conf:.2f}")
+                        #annotator.box_label(xyxy, label, color=colors(c, True))
                         annotator.box_label(xyxy, label, color=colors(c, True))
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
@@ -247,6 +249,7 @@ def parse_opt():
             now = now + '-' + temp_time
         else:
             now = now + temp_time
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default=ROOT / r"best_v2.pt", help='model path or triton URL')
     parser.add_argument('--temp', type=str, default= ROOT / r'my_temp/cycle_images', help='file/dir/URL/glob/screen/0(webcam)')

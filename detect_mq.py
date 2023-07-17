@@ -50,7 +50,7 @@ def mq_receive():
 # 处理消息队列数据
 def mq_data_init(mq_json):
      mq_list = json.loads(mq_json)
-     log_temp = 'mq_接收到' + str(len(mq_json)) + '张图片'
+     log_temp = 'mq_接收到' + str(len(mq_list)) + '张图片'
      logging.info(log_temp)
      for element in mq_list:
          file_name = element['name']
@@ -114,4 +114,9 @@ def main():
           sleep(1)       #多线程需要sleep
 
 if __name__ == '__main__':
+    log_name = 'D:\Deep Learning\\yolov5-server_v2\\log\\' + 'mq_test' + '.'+'log'
+    logging.basicConfig(filename= log_name, 
+                        level=logging.DEBUG, 
+                        format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',
+                        datefmt='%m/%d %H:%M:%S',)
     main()

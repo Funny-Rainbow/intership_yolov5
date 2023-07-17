@@ -9,11 +9,11 @@ from time import sleep, localtime, time
 import my_detect, sendToSQL
 
 source = r'H:\backup\files\jsy-camera\cameraCapture'
-temp = r'my_temp/cycle_images'
+cycle_temp = r'my_temp/cycle_images'
 
 m = 6   #设置照片显示大小
 
-def copy_files(set_date, set_time, source, temp):
+def copy_files(set_date, set_time, source, cycle_temp):
     dir_list = os.listdir(source)# 遍历设备
     file_list = []
     for path_name, dir, files_name in os.walk(source):
@@ -31,12 +31,12 @@ def copy_files(set_date, set_time, source, temp):
                 name, _ = j.rsplit('.' + fileType)
                 name = name.replace('.', '')
                 old_name = path_name + '\\' + j
-                new_name = temp + '\\' + name + "." + fileType #文件夹名+文件名+格式
+                new_name = cycle_temp + '\\' + name + "." + fileType #文件夹名+文件名+格式
                 shutil.copyfile(old_name, new_name)
 
-#显示识别到的疑似非农化照片
+#显示识别到的疑似非农化照片(默认关闭此功能)
 def show_images(source, detected_files):
-     log_temp = "cycle_识别到",len(detected_files),"张疑似非农化照片"
+     log_temp = "cycle_识别到" + str(len(detected_files)) + "张疑似非农化照片"
      logging.info(log_temp)
      for i in range(len(detected_files)):
           id, filename = detected_files[i][0].split("_")
@@ -47,29 +47,29 @@ def show_images(source, detected_files):
           cv2.waitKey(0)
           cv2.destroyAllWindows()
 
-def recog(set_date,set_time, source, temp):
+def recog(set_date,set_time, source, cycle_temp):
 
     # 只有在规定时间才执行
     if int(localtime(time())[3]) == set_time:
-        if os.path.isdir(temp):
+        if os.path.isdir(cycle_temp):
             try:
-                shutil.rmtree(temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
+                shutil.rmtree(cycle_temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
             except Exception as error:
                 print(error, '文件夹已被删除')
-        if not os.path.isdir(temp):
+        if not os.path.isdir(cycle_temp):
             try:
-                os.mkdir(temp)
+                os.mkdir(cycle_temp)
             except Exception as error:
                 print(error)
         
-        copy_files(set_date, set_time, source, temp) # 将不同设备下的照片临时拷贝到同一目录下，便于后续识别
-        tempDir = os.listdir(temp)
+        copy_files(set_date, set_time, source, cycle_temp) # 将不同设备下的照片临时拷贝到同一目录下，便于后续识别
+        tempDir = os.listdir(cycle_temp)
         # 判断暂存文件夹内有无图片
-        log_temp = 'cycle_找到了',len(tempDir),'张照片'
+        log_temp = 'cycle_找到了' + str(len(tempDir)) + '张照片'
         logging.info(log_temp)
         if len(tempDir):
             opt = my_detect.parse_opt() # 获取需要传入ai识别的参数
-            opt.temp = temp
+            opt.temp = cycle_temp
             detected_files, undetected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
             #show_images(source, detected_files) # 从备份文件中查看疑似非农化的图片
         else:
@@ -78,7 +78,7 @@ def recog(set_date,set_time, source, temp):
             
             logging.info('cycle_未发现今日图片，停止识别')
         try:
-                shutil.rmtree(temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
+                shutil.rmtree(cycle_temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
         except Exception as error:
                 print(error, '文件夹已被删除')
         
@@ -101,7 +101,7 @@ def parse_opt():
     parser.add_argument('--set_time',  type=int, default= 23, help='choose when does the process run')
     parser.add_argument('--source', type=str, default= source, help='path of the device root(not photos root)')
     #parser.add_argument('--source', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
-    parser.add_argument('--cycle_temp', type=str, default= temp, help='temprorarily create a folder to store photos')
+    parser.add_argument('--cycle_temp', type=str, default= cycle_temp, help='temprorarily create a folder to store photos')
     myopt, unknown = parser.parse_known_args()
     if unknown:
          print('Unknown in detect_cycle.py arguments:', unknown)
@@ -116,18 +116,20 @@ def main():
 
         # 获取参数
         myopt = parse_opt()
-        log_temp = 'cycle_parameters:',myopt
+        log_temp = 'cycle_parameters:' + str(myopt)
         logging.debug(log_temp)
 
         #识别
         detected_files, undetected_files = recog(**vars(myopt))
         # id,create_time, name, confidence
         if detected_files or undetected_files:
-            log_temp = 'cycle_undetected_files:', undetected_files, 'detected_files:', detected_files
+            log_temp = 'cycle_undetected_files:' + str(undetected_files)
+            logging.info(log_temp)
+            log_temp = 'detected_files:' + str(detected_files)
             logging.info(log_temp)
             sendToSQL.s2S(detected_files, undetected_files)
             toatal = len(undetected_files)+len(detected_files)
-            log_temp = 'cycle_在', toatal, '张照片中识别到了：', len(detected_files),'张疑似非农化照片'
+            log_temp = 'cycle_在' + str(toatal) + '张照片中识别到了：' + str(len(detected_files)) + '张疑似非农化照片'
             logging.info(log_temp)
             print('cycle_在', len(undetected_files), '张照片中识别到了：', len(detected_files),'张非农化照片')
         else:
@@ -135,7 +137,7 @@ def main():
              logging.info('cycle_未找到照片')
 
         # 完成/未到规定时间就休眠
-        log_temp = 'cycle_休眠,现在时间', localtime(time())[3],'时'
+        log_temp = 'cycle_休眠,现在时间' + str(localtime(time())[3]) + '时'
         logging.info(log_temp)
         print("休眠,现在时间", localtime(time())[3],"时")
         logging.info("cycle_线程休眠")
@@ -143,4 +145,9 @@ def main():
         sleep(60)# 多线程，不可删sleep
 
 if __name__ == '__main__':
+     log_name = 'D:\Deep Learning\\yolov5-server_v2\\log\\' + 'cycle_test' + '.'+'log'
+     logging.basicConfig(filename= log_name, 
+                        level=logging.DEBUG, 
+                        format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',
+                        datefmt='%m/%d %H:%M:%S',)
      main()
