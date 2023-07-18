@@ -98,15 +98,15 @@ def recog(set_date,set_time, source, cycle_temp):
 
 # 获取参数
 def parse_opt():
-    today = str(datetime.date.today())
-    today_splited = today.split('-')# 分离年月日
-    today = ''
-    today = str(today_splited[0])+str(today_splited[1]+str(today_splited[2])) #获取今天的日期
-    today = '20230622' #仅限测试使用
+    yesterday = str(datetime.date.today() + datetime.timedelta(-1))
+    yesterday_splited = yesterday.split('-')# 分离年月日
+    yesterday = ''
+    yesterday = str(yesterday_splited[0])+str(yesterday_splited[1]+str(yesterday_splited[2])) #获取今天的日期
+    #yesterday = '20230622' #仅限测试使用
     #now = localtime(time())[3]
     parser = argparse.ArgumentParser()
     args, unknown = parser.parse_known_args()
-    parser.add_argument('--set_date',  type=str, default= today, help='only for test, just leave it defult')
+    parser.add_argument('--set_date',  type=str, default= yesterday, help='only for test, just leave it defult')
     parser.add_argument('--set_time',  type=int, default= 23, help='choose when does the process run')
     parser.add_argument('--source', type=str, default= source, help='path of the device root(not photos root)')
     #parser.add_argument('--source', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')

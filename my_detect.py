@@ -168,7 +168,6 @@ def run(
                     det_dict['cfd']=o[4]
                     det_list.append(det_dict)
                 detected_files.append([p.name, det_list])
-                print(detected_files)
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
                 #print('det',det.tolist())

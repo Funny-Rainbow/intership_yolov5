@@ -12,11 +12,6 @@ from pathlib import Path
 from time import sleep
 import my_detect, sendToSQL
 
-credentials = pika.PlainCredentials('admin', 'jm12345678')
-Parameter = pika.ConnectionParameters('127.0.0.1',5672,'/',credentials)
-connection = pika.BlockingConnection(Parameter)
-global channel
-
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
 if str(ROOT) not in sys.path:
@@ -88,6 +83,10 @@ def delete_temp():
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--mq_temp', type=str, default=ROOT / r"my_temp/mq_images", help='temporarily store recieved imgs')
+    parser.add_argument('--mq_user', type=str, default= 'admin', help='mq user name')
+    parser.add_argument('--mq_pwd', type=str, default='jm12345678', help='mq password')
+    parser.add_argument('--mq_ip', type=str, default='127.0.0.1', help='mq producer ip')
+    parser.add_argument('--mq_port', type=int, default=5672, help='mq port')
     mq_opt, unknown = parser.parse_known_args()
     if unknown:
         log_temp = 'mq_Unknown in detected_mq.py arguments:', unknown
@@ -97,13 +96,20 @@ def parse_opt():
 
 # 主函数，循环监听
 def main():
+     global connection
+     global mq_temp
+     mq_opt = parse_opt()# 获取参数
+     mq_temp = mq_opt.mq_temp # 传入消息队列图片临时存放路径
+     mq_user = mq_opt.mq_user
+     mq_pwd  = mq_opt.mq_pwd
+     mq_ip  = mq_opt.mq_ip
+     mq_port  = mq_opt.mq_port
+     credentials = pika.PlainCredentials(mq_user, mq_pwd)
+     Parameter = pika.ConnectionParameters(mq_ip,mq_port,'/',credentials)
+     connection = pika.BlockingConnection(Parameter)
      while True:
           logging.info("mq_线程运行")
           print('正在运行mq线程')
-
-          mq_opt = parse_opt()# 获取参数
-          global mq_temp
-          mq_temp = mq_opt.mq_temp
 
           delete_temp()  #删除临时文件夹和未删掉的照片
           init()         #重新创建临时文件夹
@@ -116,7 +122,7 @@ def main():
           
           logging.info("mq_线程休眠")
           print('mq线程休眠')
-          sleep(1)       #多线程需要sleep
+          sleep(0.5)       #多线程需要sleep
 
 if __name__ == '__main__':
     log_name = ROOT / 'log/mq_test.log'
