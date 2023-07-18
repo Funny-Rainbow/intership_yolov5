@@ -151,7 +151,7 @@ def main():
         print("休眠,现在时间", localtime(time())[3],"时")
         logging.info("cycle_线程休眠")
         print('cycle线程休眠')
-        sleep(60)# 多线程，不可删sleep
+        sleep(60*60)# 多线程，不可删sleep
 
 if __name__ == '__main__':
      log_name = ROOT / 'log/cycle_test.log'
