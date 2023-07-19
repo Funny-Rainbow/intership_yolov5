@@ -1,4 +1,4 @@
-import psycopg2
+import pymysql
 import logging
 import datetime
 import argparse
@@ -8,8 +8,8 @@ import json
 # id(int), create_time(datetime), device(str), file_name(str), confidence(float)
 
 # 连接数据库
-def init(db_host,db_port, db_user,db_pwd,db_database):
-    db = psycopg2.connect(host=db_host, user= db_user, password=db_pwd, dbname=db_database, port=db_port)
+def init(db_host,db_user,db_pwd,db_database):
+    db = pymysql.connect(host=db_host, user= db_user, password=db_pwd, database=db_database)
     # 使用cursor()创建一个cursor对象
     cursor = db.cursor()
     return db, cursor
@@ -32,19 +32,19 @@ def dataInit(detected_files, undetected_files):
             #     print(dict(k))
             #     input()
             file_data = json.dumps(i[1])
-            new_data = [now, de_file_name, file_data, '1']
+            new_data = [now, de_file_name, file_data, 1]
             de_data.append(new_data)
     if undetected_files:
         for j in undetected_files:
             un_file_name = j
-            new_un_data = [now, un_file_name, None, '0']
+            new_un_data = [now, un_file_name, None, 0]
             un_data.append(new_un_data)
     return de_data + un_data
 
 def send(db, cursor, data):
     try:
     # 执行SQL,插入多条数据
-        cursor.executemany("insert into cv_table(create_time, file_name, det_data, non_argric) values (%s,%s,%s,%s)", data)# id由数据库自动填充
+        cursor.executemany("insert into cv_data(create_time, file_name, detect_data, non_argric) values (%s,%s,%s,%s)", data)# id由数据库自动填充
 
         # 提交数据
         db.commit()
@@ -75,10 +75,9 @@ def s2S(detected_files, undetected_files):
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--db_host',  type=str, default= '127.0.0.1', help='database host')
-    parser.add_argument('--db_port', type=str, default= '5432', help='database port')
-    parser.add_argument('--db_user', type=str, default= 'postgres', help='database user')
+    parser.add_argument('--db_user', type=str, default= 'root', help='database user')
     #parser.add_argument('--source', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
-    parser.add_argument('--db_pwd', type=str, default= 'jm12345678', help='database password')
+    parser.add_argument('--db_pwd', type=str, default= '##JmMyC2810', help='database password')
     parser.add_argument('--db_database', type=str, default= 'cv_db', help='database name')
     dbopt, unknown = parser.parse_known_args()
     if unknown:
