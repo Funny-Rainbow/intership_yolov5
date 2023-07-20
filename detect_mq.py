@@ -14,8 +14,6 @@ import my_detect, sendToSQL
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
-if str(ROOT) not in sys.path:
-    sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
 
@@ -82,7 +80,7 @@ def delete_temp():
 # 创建参数
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--mq_temp', type=str, default=ROOT / r"my_temp/mq_images", help='temporarily store recieved imgs')
+    parser.add_argument('--mq_temp', type=str, default= ROOT / r"my_temp/mq_images", help='temporarily store recieved imgs')
     parser.add_argument('--mq_user', type=str, default= 'admin', help='mq user name')
     parser.add_argument('--mq_pwd', type=str, default='jm12345678', help='mq password')
     parser.add_argument('--mq_ip', type=str, default='127.0.0.1', help='mq producer ip')
