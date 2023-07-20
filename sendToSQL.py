@@ -3,9 +3,7 @@ import logging
 import datetime
 import argparse
 import json
-# 数据库格式：
-#     1          2                  3             4                  5
-# id(int), create_time(datetime), device(str), file_name(str), confidence(float)
+# postgresql
 
 # 连接数据库
 def init(db_host,db_port, db_user,db_pwd,db_database):
@@ -22,15 +20,6 @@ def dataInit(detected_files, undetected_files):
     if detected_files:
         for i in detected_files:
             de_file_name = i[0]
-            # print(i[1])
-            # for k in i[1]:
-            #     print(k)
-            #     xyxy = k[0:4]
-            #     print(xyxy)
-            #     confidence = k[4]
-            #     print(confidence)
-            #     print(dict(k))
-            #     input()
             file_data = json.dumps(i[1])
             new_data = [now, de_file_name, file_data, '1']
             de_data.append(new_data)
@@ -74,7 +63,7 @@ def s2S(detected_files, undetected_files):
 # 创建参数
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--db_host',  type=str, default= '127.0.0.1', help='database host')
+    parser.add_argument('--db_host',  type=str, default= '127.0.0.1', help='database host ip')
     parser.add_argument('--db_port', type=str, default= '5432', help='database port')
     parser.add_argument('--db_user', type=str, default= 'postgres', help='database user')
     #parser.add_argument('--source', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
@@ -86,5 +75,5 @@ def parse_opt():
     return dbopt
 
 if __name__ == '__main__':
-    old_data = [['20210903130602.jpg', [[62.769989013671875, 10.444976806640625, 634.982177734375, 422.5649108886719, 0.8292975425720215]],1]]
+    old_data = [['20210903130602.jpg', [{[62.769989013671875, 10.444976806640625, 634.982177734375, 422.5649108886719, 0.8292975425720215]}],1]]
     s2S(old_data,None)

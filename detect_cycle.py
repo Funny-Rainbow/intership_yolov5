@@ -10,15 +10,15 @@ from time import sleep, localtime, time
 
 import my_detect, sendToSQL
 
-source = r'H:\backup\files\jsy-camera\cameraCapture'
-cycle_temp = r'my_temp/cycle_images'
-
 
 FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
 if str(ROOT) not in sys.path:
     sys.path.append(str(ROOT))  # add ROOT to PATH
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
+
+source = r'H:\backup\files\jsy-camera\cameraCapture'
+cycle_temp = str(ROOT / r'my_temp/cycle_images')
 
 m = 6   #设置照片显示大小
 
@@ -102,7 +102,7 @@ def parse_opt():
     yesterday_splited = yesterday.split('-')# 分离年月日
     yesterday = ''
     yesterday = str(yesterday_splited[0])+str(yesterday_splited[1]+str(yesterday_splited[2])) #获取今天的日期
-    #yesterday = '20230622' #仅限测试使用
+    yesterday = '20230622' #仅限测试使用
     #now = localtime(time())[3]
     parser = argparse.ArgumentParser()
     args, unknown = parser.parse_known_args()
@@ -151,7 +151,7 @@ def main():
         print("休眠,现在时间", localtime(time())[3],"时")
         logging.info("cycle_线程休眠")
         print('cycle线程休眠')
-        sleep(60*60)# 多线程，不可删sleep
+        sleep(60)# 多线程，不可删sleep
 
 if __name__ == '__main__':
      log_name = ROOT / 'log/cycle_test.log'
