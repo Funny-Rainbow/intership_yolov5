@@ -6,6 +6,7 @@ import base64
 import logging
 import pika
 import json
+import requests
 from PIL import Image
 from io import BytesIO
 from pathlib import Path
@@ -26,10 +27,14 @@ def init():
                print(error)
 
 def callback(ch, method, properties, body):
-    print('[^]消息队列收到消息')
-    logging.info('[^]消息队列收到消息')
-    mq_data_init(body)
-    channel.close()
+     print('[^]消息队列收到消息')
+     logging.info('[^]消息队列收到消息')
+     mq_data = mq_data_init(body)
+     channel.close()
+     detected_files, undetected_files = recog() #识别
+     log_temp = 'mq_在'+ str(len(detected_files)+len(undetected_files)) + '张照片中识别到' + str(len(detected_files)) + '张疑似非农化照片'
+     logging.info(log_temp)
+     sendToSQL.s2S(detected_files, undetected_files, mq_data)# 将数据发送给数据库
 
 # 接收消息队列消息
 def mq_receive():
@@ -50,10 +55,18 @@ def mq_data_init(mq_json):
      mq_list = json.loads(mq_json)
      log_temp = 'mq_接收到' + str(len(mq_list)) + '张图片'
      logging.info(log_temp)
+     mq_data = []
      for element in mq_list:
-         file_name = element['name']
-         base64_string = element['base64']
-         b64_decode(file_name, base64_string, mq_temp)
+          pic = requests.get(element['url'])
+          save_path = 'my_temp/mq_images/' + element['name']
+          with open(save_path,"wb") as f:
+               f.write(pic.content)
+          mq_data.append(list(element.values()))
+     return mq_data
+     # for element in mq_list:
+     #     file_name = element['name']
+     #     base64_string = element['base64']
+     #     b64_decode(file_name, base64_string, mq_temp)
 
 # Base64转图片
 def b64_decode(file_name, base64_string, save_path):
@@ -112,10 +125,6 @@ def main():
           delete_temp()  #删除临时文件夹和未删掉的照片
           init()         #重新创建临时文件夹
           mq_receive()   #等待消息队列消息
-          detected_files, undetected_files = recog() #识别
-          log_temp = 'mq_在'+ str(len(detected_files)+len(undetected_files)) + '张照片中识别到' + str(len(detected_files)) + '张疑似非农化照片'
-          logging.info(log_temp)
-          sendToSQL.s2S(detected_files, undetected_files)# 将数据发送给数据库
           delete_temp()  #删除临时文件夹和照片
           
           logging.info("mq_线程休眠")

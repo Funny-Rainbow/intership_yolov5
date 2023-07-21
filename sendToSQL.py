@@ -50,13 +50,13 @@ def send(db, cursor, data):
     db.close()
 
 # 主函数  
-def s2S(detected_files, undetected_files):
+def s2S(detected_files, undetected_files, mq_data):
     #获取参数
     dbopt = parse_opt()
     #数据库初始化
     db,cursor = init(**vars(dbopt))
     #数据处理
-    data = dataInit(detected_files, undetected_files)
+    data = dataInit(detected_files, undetected_files, mq_data)
     #发送到数据库
     send(db, cursor, data)
 
