@@ -17,6 +17,10 @@ dict0 = [
     }
 ]
 
+hello = [['2002.jpg', 'https://img-blog.csdn.net/20180710195812334?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTMxNzA1MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70', '0',
+'jm123', '123,456'], ['2023.jpg', 'https://img-blog.csdn.net/20180710200659285?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTMxNzA1MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70', '1', 'jm321', '456,654']]
+
+print(dict0['name'])
 need_data = []
 for element in dict0:
     pic = requests.get(element['url'])
@@ -26,3 +30,4 @@ for element in dict0:
     need_data.append(list(element.values()))
     for key in list(element.keys()):
         pass
+print(need_data)

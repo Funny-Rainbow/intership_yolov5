@@ -13,27 +13,40 @@ def init(db_host,db_port, db_user,db_pwd,db_database):
     return db, cursor
 
 # 数据格式初始化
-def dataInit(detected_files, undetected_files):
+def dataInit(detected_files, undetected_files, mq_data):
     de_data = []
     un_data = []
+    data = []
     now = datetime.datetime.now()
-    if detected_files:
-        for i in detected_files:
-            de_file_name = i[0]
-            file_data = json.dumps(i[1])
-            new_data = [now, de_file_name, file_data, '1']
-            de_data.append(new_data)
-    if undetected_files:
-        for j in undetected_files:
-            un_file_name = j
-            new_un_data = [now, un_file_name, None, '0']
-            un_data.append(new_un_data)
-    return de_data + un_data
-
+    if len(detected_files)+len(undetected_files) == len(mq_data):
+        if detected_files:
+            for i in detected_files:
+                de_file_name = i[0]
+                file_data = json.dumps(i[1])
+                new_data = [now, de_file_name, file_data, '1']
+                de_data.append(new_data)
+        if undetected_files:
+            for j in undetected_files:
+                un_file_name = j
+                new_un_data = [now, un_file_name, None, '0']
+                un_data.append(new_un_data)
+        all_data =  de_data + un_data
+        print(all_data)
+        print(mq_data)
+        for k in all_data:
+            for l in mq_data:
+                if k[1] == l[0]:
+                    k = k + l[1:]
+                    data.append(k)
+        print(k)
+    else:
+        print('长度错误')
+        logging.warning('长度错误')
+    return data
 def send(db, cursor, data):
     try:
     # 执行SQL,插入多条数据
-        cursor.executemany("insert into cv_table(create_time, file_name, det_data, non_argric) values (%s,%s,%s,%s)", data)# id由数据库自动填充
+        cursor.executemany("insert into cv_table(create_time, file_name, det_data, non_argric, url, source_id, source_type, geo) values (%s,%s,%s,%s,%s,%s,%s,%s)", data)# id由数据库自动填充
 
         # 提交数据
         db.commit()
