@@ -58,7 +58,7 @@ def mq_data_init(mq_json):
      mq_data = []
      for element in mq_list:
           pic = requests.get(element['url'])
-          save_path = 'my_temp/mq_images/' + element['name']
+          save_path = str(ROOT) + '/' + 'my_temp/mq_images/' + element['name']
           with open(save_path,"wb") as f:
                f.write(pic.content)
           mq_data.append(list(element.values()))

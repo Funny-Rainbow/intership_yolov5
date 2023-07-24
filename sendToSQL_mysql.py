@@ -15,21 +15,21 @@ def init(db_host,db_user,db_pwd,db_database):
     return db, cursor
 
 # 数据格式初始化
-def dataInit(detected_files, undetected_files,l data):
+def dataInit(detected_files, undetected_files):
     de_data = []
     un_data = []
     now = datetime.datetime.now()
-        if detected_files:
-            for i in detected_files:
-                de_file_name = i[0]
-                file_data = json.dumps(i[1])
-                new_data = [now, de_file_name, file_data, 1]
-                de_data.append(new_data)
-        if undetected_files:
-            for j in undetected_files:
-                un_file_name = j
-                new_un_data = [now, un_file_name, None, 0]
-                un_data.append(new_un_data)
+    if detected_files:
+        for i in detected_files:
+            de_file_name = i[0]
+            file_data = json.dumps(i[1])
+            new_data = [now, de_file_name, file_data, 1]
+            de_data.append(new_data)
+    if undetected_files:
+        for j in undetected_files:
+            un_file_name = j
+            new_un_data = [now, un_file_name, None, 0]
+            un_data.append(new_un_data)
     return de_data + un_data
 
 def send(db, cursor, data):

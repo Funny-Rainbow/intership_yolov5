@@ -51,14 +51,14 @@ test_data = ['3213213123213.jpg',[
 dict0 = [
     {
     'name':'2002.jpg',
-    'url':'https://img-blog.csdn.net/20180710195812334?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTMxNzA1MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70',
+    'url':'https://s1.ax1x.com/2023/07/24/pCLc5wj.png',
     'source_id':'0',
     'source_type':'jm123',
     'itude':'123,456'
     },
     {
     'name':'2023.jpg',
-    'url':'https://img-blog.csdn.net/20180710200659285?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8zOTMxNzA1MQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70',
+    'url':'https://s1.ax1x.com/2023/07/24/pCLgpkR.jpg',
     'source_id':'1',
     'source_type':'jm321',
     'itude':'456,654'
@@ -73,8 +73,7 @@ connection = pika.BlockingConnection(Parameter)
 
 channel = connection.channel()
 # 3. 创建队列，queue_declare可以使用任意次数，
-# 如果指定的queue不存在，则会创建一个queue，如果已经存在，
-# 则不会做其他动作，官方推荐，每次使用时都可以加上这句
+# 如果指定的queue不存在，则会创建一个queue，如果已经存在，则不会做其他动作，官方推荐，每次使用时都可以加上这句
 channel.queue_declare(queue='cv')
 # 4. 发布消息
 channel.basic_publish(
