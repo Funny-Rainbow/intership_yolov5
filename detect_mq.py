@@ -1,4 +1,3 @@
-import sys
 import os
 import shutil
 import argparse
@@ -27,22 +26,23 @@ def init():
                print(error)
 
 def callback(ch, method, properties, body):
-     print('[^]消息队列收到消息')
-     logging.info('[^]消息队列收到消息')
+     print('[^]消息队列收到消息 正在处理')
+     logging.info('[^]消息队列收到消息 正在处理')
      mq_data = mq_data_init(body)
      channel.close()
      detected_files, undetected_files = recog() #识别
      log_temp = 'mq_在'+ str(len(detected_files)+len(undetected_files)) + '张照片中识别到' + str(len(detected_files)) + '张疑似非农化照片'
      logging.info(log_temp)
+     print(log_temp)
      sendToSQL.s2S(detected_files, undetected_files, mq_data)# 将数据发送给数据库
 
 # 接收消息队列消息
-def mq_receive():
+def mq_receive(mq_queue):
      global channel
      channel = connection.channel()
-     channel.queue_declare(queue='cv')
+     channel.queue_declare(queue=mq_queue)# 指定queue，如果没有则创建，建议总是使用
      channel.basic_consume(
-     queue='cv',  # 接收指定queue的消息
+     queue=mq_queue,  # 接收指定queue的消息
      on_message_callback=callback,  # 接收到消息后的处理程序
      auto_ack=True)  # 指定为True，表示消息接收到后自动给消息发送方回复确认，已收到消息
      print('[*] 正在等待消息队列数据')
@@ -98,6 +98,7 @@ def parse_opt():
     parser.add_argument('--mq_pwd', type=str, default='jm12345678', help='mq password')
     parser.add_argument('--mq_ip', type=str, default='127.0.0.1', help='mq producer ip')
     parser.add_argument('--mq_port', type=int, default=5672, help='mq port')
+    parser.add_argument('--mq_queue', type=str, default='cv', help='mq queue')
     mq_opt, unknown = parser.parse_known_args()
     if unknown:
         log_temp = 'mq_Unknown in detected_mq.py arguments:', unknown
@@ -115,6 +116,8 @@ def main():
      mq_pwd  = mq_opt.mq_pwd
      mq_ip  = mq_opt.mq_ip
      mq_port  = mq_opt.mq_port
+     mq_queue = mq_opt.mq_queue
+
      credentials = pika.PlainCredentials(mq_user, mq_pwd)
      Parameter = pika.ConnectionParameters(mq_ip,mq_port,'/',credentials)
      connection = pika.BlockingConnection(Parameter)
@@ -124,7 +127,7 @@ def main():
 
           delete_temp()  #删除临时文件夹和未删掉的照片
           init()         #重新创建临时文件夹
-          mq_receive()   #等待消息队列消息
+          mq_receive(mq_queue)   #等待消息队列消息
           delete_temp()  #删除临时文件夹和照片
           
           logging.info("mq_线程休眠")
