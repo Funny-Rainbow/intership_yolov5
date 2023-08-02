@@ -17,18 +17,15 @@ def init(db_host,db_port, db_user,db_pwd,db_database):
         log_temp = '连接数据库失败，请检查数据库和网络状态,error:' + str(error)
         logging.warning(log_temp)
 
-
+# 匹配 识别得到的数据 和 消息队列发来的数据
 def match(all_data, mq_data):
     data = []
     for i in mq_data:
-        print('i')
         for j in all_data:
             if j[1] == i['name']:
-                data_temp = j + [i['url']] + [i['sourceId']] + [i['sourceType']] + [i['itude']] + [i['captureTime']] + [i['equipmentId']]
+                data_temp = j + [i['url']] + [i['sourceId']] + [i['sourceType']] + [i['itude']] + [i['captureTime']] + [i['equipmentId']] # 此处顺序需要与后续插入数据库的命令中数据的顺序一致
                 data.append(data_temp)
-                print(data)
                 break
-    print('data in match', data)
     return data
 
 # 数据格式初始化
@@ -37,8 +34,6 @@ def dataInit(detected_files, undetected_files, mq_data):
     un_data = []
     data = []
     now = datetime.datetime.now()
-    print(undetected_files)
-    print(mq_data)
     if len(detected_files)+len(undetected_files) == len(mq_data):
         if detected_files:
             for i in detected_files: # 处理检测到非农化的数据
@@ -64,7 +59,7 @@ def send(db, cursor, data):
     if data:
         try:
         # 执行SQL,插入多条数据
-            cursor.executemany("insert into cv_table(create_time, file_name, det_data, non_argric, url, source_id, source_type, geo, capture_time, equipment_id) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", data)# id由数据库自动填充
+            cursor.executemany("insert into cv_table(create_time, file_name, det_data, non_argric, url, source_id, source_type, geo, capture_time, equipment_id) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", data)# 此处顺序需要与上方产生数据的顺序一致
 
             # 提交数据
             db.commit()

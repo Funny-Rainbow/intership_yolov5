@@ -44,7 +44,7 @@ def mq_receive(mq_queue):
      channel.basic_consume(
      queue=mq_queue,  # 接收指定queue的消息
      on_message_callback=callback,  # 接收到消息后的处理程序
-     auto_ack=False)  # 指定为True，表示消息接收到后自动给消息发送方回复确认，已收到消息
+     auto_ack=True)  # 指定为True，表示消息接收到后自动给消息发送方回复确认，已收到消息
      print('[*] 正在等待消息队列数据')
      logging.info('[*] 正在等待消息队列数据')
      # 6. 开始循环等待，一直处于等待接收消息的状态
@@ -53,7 +53,6 @@ def mq_receive(mq_queue):
 # 处理消息队列数据
 def mq_data_init(mq_json):
      mq_list = json.loads(mq_json)
-     print('mq_list', mq_list)
      log_temp = 'mq_接收到' + str(len(mq_list)) + '张图片'
      logging.info(log_temp)
      log_temp = 'mq数据:' + str(mq_list)
@@ -66,10 +65,6 @@ def mq_data_init(mq_json):
                f.write(pic.content)
           #mq_data.append(list(element.values()))
      return mq_list
-     # for element in mq_list:
-     #     file_name = element['name']
-     #     base64_string = element['base64']
-     #     b64_decode(file_name, base64_string, mq_temp)
 
 # Base64转图片
 def b64_decode(file_name, base64_string, save_path):
