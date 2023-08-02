@@ -9,6 +9,12 @@ FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
+"""
+如果需要修改参数：
+default为一般参数，的直接修改default值即可
+default为store_true的意为默认为false,当传入对应参数如: --nosave 时，传入值变为true。反之为store_false时默认为true，传入 --nosave 后为false
+可通过命令传参,如：python detect_mq.py --db_pwd '12345'
+"""
 
 # 创建sendToSQL.py参数
 def s2S_opt():

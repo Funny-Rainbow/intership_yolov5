@@ -33,11 +33,11 @@ GPU环境配置：
 #### 具体参数说明(所有参数的默认值均可在parameters.py修改)
     1.数据库和检测
     参数：
-    --db_host	        指定 数据库IP				格式：略		        默认：127.0.0.1
+    --db_host	        指定 数据库IP				格式：略		        默认：47.109.32.231
     --db_port           指定 数据库端口             格式：int               默认:5432
     --db_user	        指定 数据库用户名			格式：略		        默认：postgres
-    --db_pwd	        指定 数据库密码				格式：略		        默认：'jm12345678'
-    --db_database       指定 数据库名称				格式：略		        默认：'cv_db'
+    --db_pwd	        指定 数据库密码				格式：略		        默认：'rdhy@9999'
+    --db_database       指定 数据库名称				格式：略		        默认：'ai-test'
     --weights	        指定 权重文件				格式：略		        默认：'best_v1.pt'（不需要换检测模型就保持不动）
     --data		指定 yaml文件位置			格式：略		        默认：'data/uc.yaml'（不需要换检测模型就保持不动）
     --conf-thres	指定 识别为目标的置信度阈值		格式：Float	        	默认：0.5
@@ -47,6 +47,7 @@ GPU环境配置：
     参数:
     --mq_temp	指定 消息队列图像暂存目录		格式：略		        默认：ROOT / 'my_temp/mq_images'	
     --mq_user		指定 消息队列用户名			格式：str			默认：'admin'
-    --mq_pwd		指定 消息队密码				格式：str			默认：'jm12345678'
-    --mq_ip		指定 消息队列ip				格式：str			默认：'127.0.0.1'
+    --mq_pwd		指定 消息队密码				格式：str			默认：'admin'
+    --mq_ip		指定 消息队列ip				格式：str			默认：'192.168.124.18'
     --mq_port		指定 消息队列端口			格式：int			默认：5672
+    --mq_queue  指定消息队列队列                格式：str           默认：building_house_ai_queue

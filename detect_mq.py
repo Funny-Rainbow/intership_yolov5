@@ -25,6 +25,7 @@ def init():
           except Exception as error:
                print(error)
 
+# 消息队列 回调函数 执行剩余指令
 def callback(ch, method, properties, body):
      print('[^]消息队列收到消息 正在处理')
      logging.info('[^]消息队列收到消息 正在处理')
