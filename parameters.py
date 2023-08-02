@@ -29,10 +29,10 @@ def mq_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--mq_temp', type=str, default= ROOT / r"my_temp/mq_images",    help='消息队列 图片暂存位置')
     parser.add_argument('--mq_user', type=str, default= 'admin',                        help='消息队列 用户名')
-    parser.add_argument('--mq_pwd', type=str, default='jm12345678',                     help='消息队列 密码')
-    parser.add_argument('--mq_ip', type=str, default='127.0.0.1',                       help='消息队列 生产者IP')
+    parser.add_argument('--mq_pwd', type=str, default='admin',                          help='消息队列 密码')
+    parser.add_argument('--mq_ip', type=str, default='192.168.124.18',                  help='消息队列 生产者IP')
     parser.add_argument('--mq_port', type=int, default=5672,                            help='消息队列 端口')
-    parser.add_argument('--mq_queue', type=str, default='cv',                           help='消息队列 队列名称')
+    parser.add_argument('--mq_queue', type=str, default='building_house_ai_queue',      help='消息队列 队列名称')
     mq_opt, unknown = parser.parse_known_args()
     if unknown:
         log_temp = 'mq_Unknown in detected_mq.py arguments:', unknown

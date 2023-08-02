@@ -1,6 +1,5 @@
 import os
 import shutil
-import argparse
 import base64
 import logging
 import pika
@@ -41,11 +40,11 @@ def callback(ch, method, properties, body):
 def mq_receive(mq_queue):
      global channel
      channel = connection.channel()
-     channel.queue_declare(queue=mq_queue)# 指定queue，如果没有则创建，建议总是使用
+     #channel.queue_declare(queue=mq_queue)# 指定queue
      channel.basic_consume(
      queue=mq_queue,  # 接收指定queue的消息
      on_message_callback=callback,  # 接收到消息后的处理程序
-     auto_ack=True)  # 指定为True，表示消息接收到后自动给消息发送方回复确认，已收到消息
+     auto_ack=False)  # 指定为True，表示消息接收到后自动给消息发送方回复确认，已收到消息
      print('[*] 正在等待消息队列数据')
      logging.info('[*] 正在等待消息队列数据')
      # 6. 开始循环等待，一直处于等待接收消息的状态
@@ -54,16 +53,19 @@ def mq_receive(mq_queue):
 # 处理消息队列数据
 def mq_data_init(mq_json):
      mq_list = json.loads(mq_json)
+     print('mq_list', mq_list)
      log_temp = 'mq_接收到' + str(len(mq_list)) + '张图片'
      logging.info(log_temp)
-     mq_data = []
+     log_temp = 'mq数据:' + str(mq_list)
+     logging.debug(log_temp)
+     #mq_data = []
      for element in mq_list:
           pic = requests.get(element['url'])
           save_path = str(ROOT) + '/' + 'my_temp/mq_images/' + element['name']
           with open(save_path,"wb") as f:
                f.write(pic.content)
-          mq_data.append(list(element.values()))
-     return mq_data
+          #mq_data.append(list(element.values()))
+     return mq_list
      # for element in mq_list:
      #     file_name = element['name']
      #     base64_string = element['base64']
@@ -92,7 +94,6 @@ def delete_temp():
                print(error, '文件夹已被删除')
 
 
-
 # 主函数，循环监听
 def main():
      global connection
@@ -108,25 +109,36 @@ def main():
      credentials = pika.PlainCredentials(mq_user, mq_pwd)
      Parameter = pika.ConnectionParameters(mq_ip,mq_port,'/',credentials)
      connection = pika.BlockingConnection(Parameter)
-     while True:
-          logging.info("mq_线程运行")
-          print('正在运行mq线程')
 
+     logging.info('mq_启动')
+     print('mq_启动')
+     while True:
           delete_temp()  #删除临时文件夹和未删掉的照片
           init()         #重新创建临时文件夹
           mq_receive(mq_queue)   #等待消息队列消息
           delete_temp()  #删除临时文件夹和照片
           
-          logging.info("mq_线程休眠")
-          print('mq线程休眠')
+          logging.info("mq_本次结束")
+          print('mq_本次结束')
           sleep(0.5)       #多线程需要sleep
 
 if __name__ == '__main__':
-    today = str(datetime.date.today())
-    log_name = 'log/mq_' + today + '.log'
-    log_name = ROOT / log_name
-    logging.basicConfig(filename= log_name, 
-                        level=logging.DEBUG, 
-                        format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',
-                        datefmt='%m/%d %H:%M:%S',)
-    main()
+     #try:
+          today = str(datetime.date.today())
+
+          if not os.path.isdir(ROOT / 'log'):
+               try:
+                    os.mkdir(ROOT / 'log')
+               except Exception as error:
+                    print(error)
+
+          # 配置 log 文件
+          log_name = 'log/mq_' + today + '.log'
+          log_name = ROOT / log_name
+          logging.basicConfig(filename= log_name, 
+                              level=logging.DEBUG, 
+                              format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',
+                              datefmt='%m/%d %H:%M:%S',)
+          main()
+     #except Exception as error:
+          #logging.error(error)
