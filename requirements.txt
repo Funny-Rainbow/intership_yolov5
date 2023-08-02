@@ -12,12 +12,18 @@ PyYAML>=5.3.1
 requests>=2.23.0
 scipy>=1.4.1
 thop>=0.1.1  # FLOPs computation
+
+
+# torch与torchvision默认为cpu版本，如果需要使用gpu版本，需要安装Nvidia cuda驱动，并前往pytorch官网下载对应版本
+# 如果是老显卡，还需要先到Nvidia官网查找该显卡所支持的cuda版本，再查找该cuda版本支持的torch和torchvision版本
 torch>=1.7.0  # see https://pytorch.org/get-started/locally (recommended)
-torchvision>=0.8.1
+torchvision>=0.8.1 # 备注
+
+
 tqdm>=4.64.0
 ultralytics>=8.0.111
-psycopg2>=2.9.6
-pika>=1.3.2
+psycopg2>=2.9.6 # pgsql数据库操作库
+pika>=1.3.2 # 消息队列库
 # protobuf<=3.20.1  # https://github.com/ultralytics/yolov5/issues/8012
 
 # Logging ---------------------------------------------------------------------

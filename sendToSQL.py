@@ -1,16 +1,21 @@
 import psycopg2
 import logging
 import datetime
-import argparse
 import json
+
+import parameters
 # postgresql
 
 # 连接数据库
 def init(db_host,db_port, db_user,db_pwd,db_database):
-    db = psycopg2.connect(host=db_host, user= db_user, password=db_pwd, dbname=db_database, port=db_port)
-    # 使用cursor()创建一个cursor对象
-    cursor = db.cursor()
-    return db, cursor
+    try:
+        db = psycopg2.connect(host=db_host, user= db_user, password=db_pwd, dbname=db_database, port=db_port)
+        # 使用cursor()创建一个cursor对象
+        cursor = db.cursor()
+        return db, cursor
+    except Exception as error:
+        log_temp = '连接数据库失败，请检查数据库和网络状态,error:' + str(error)
+        logging.warning(log_temp)
 
 # 数据格式初始化
 def dataInit(detected_files, undetected_files, mq_data):
@@ -20,29 +25,28 @@ def dataInit(detected_files, undetected_files, mq_data):
     now = datetime.datetime.now()
     if len(detected_files)+len(undetected_files) == len(mq_data):
         if detected_files:
-            for i in detected_files:
+            for i in detected_files: # 处理检测到非农化的数据
                 de_file_name = i[0]
                 file_data = json.dumps(i[1])
                 new_data = [now, de_file_name, file_data, '1']
                 de_data.append(new_data)
-        if undetected_files:
+        if undetected_files: # 处理未检测到非农化的数据
             for j in undetected_files:
                 un_file_name = j
                 new_un_data = [now, un_file_name, None, '0']
                 un_data.append(new_un_data)
-        all_data =  de_data + un_data
-        print(all_data)
-        print(mq_data)
-        for k in all_data:
+        all_data =  de_data + un_data #合并监测到非农化与未检测到的数据
+        for k in all_data: # 匹配并合并数据，将
             for l in mq_data:
                 if k[1] == l[0]:
                     k = k + l[1:]
                     data.append(k)
-        print(k)
     else:
-        print('长度错误')
-        logging.warning('长度错误')
+        print('数据长度错误')
+        logging.warning('数据长度错误')
     return data
+
+
 def send(db, cursor, data):
     try:
     # 执行SQL,插入多条数据
@@ -65,28 +69,10 @@ def send(db, cursor, data):
 # 主函数  
 def s2S(detected_files, undetected_files, mq_data):
     #获取参数
-    dbopt = parse_opt()
+    dbopt = parameters.s2S_opt()
     #数据库初始化
     db,cursor = init(**vars(dbopt))
     #数据处理
     data = dataInit(detected_files, undetected_files, mq_data)
     #发送到数据库
     send(db, cursor, data)
-
-# 创建参数
-def parse_opt():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--db_host',  type=str, default= '127.0.0.1', help='database host ip')
-    parser.add_argument('--db_port', type=str, default= '5432', help='database port')
-    parser.add_argument('--db_user', type=str, default= 'postgres', help='database user')
-    #parser.add_argument('--source', type=str, default= r'H:\backup\files\jsy-camera\cameraCapture', help='file/dir/URL/glob/screen/0(webcam)')
-    parser.add_argument('--db_pwd', type=str, default= 'jm12345678', help='database password')
-    parser.add_argument('--db_database', type=str, default= 'cv_db', help='database name')
-    dbopt, unknown = parser.parse_known_args()
-    if unknown:
-         logging.debug('Unknown in sendToSQL.py arguments:', unknown)
-    return dbopt
-
-if __name__ == '__main__':
-    old_data = [['20210903130602.jpg', [{[62.769989013671875, 10.444976806640625, 634.982177734375, 422.5649108886719, 0.8292975425720215]}],1]]
-    s2S(old_data,None)

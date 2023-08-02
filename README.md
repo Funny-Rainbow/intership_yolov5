@@ -32,7 +32,7 @@
     --db_user	        指定 数据库用户名			格式：略		        默认：postgres
     --db_pwd	        指定 数据库密码				格式：略		        默认：'jm12345678'
     --db_database       指定 数据库名称				格式：略		        默认：'cv_db'
-    --weights	        指定 权重文件				格式：略		        默认：'best_v3.pt'（不需要换检测模型就保持不动）
+    --weights	        指定 权重文件				格式：略		        默认：'best_v1.pt'（不需要换检测模型就保持不动）
     --data		指定 yaml文件位置			格式：略		        默认：'data/uc.yaml'（不需要换检测模型就保持不动）
     --conf-thres	指定 识别为目标的置信度阈值		格式：Float	        	默认：0.5
     
