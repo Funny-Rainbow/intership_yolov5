@@ -138,12 +138,18 @@ if __name__ == '__main__':
                os.mkdir(ROOT / 'log')
           except Exception as error:
                print(error)
+     
+     if not os.path.isdir(ROOT / 'my_temp'):
+          try:
+               os.mkdir(ROOT / 'my_temp')
+          except Exception as error:
+               print(error)
 
      # 配置 log 文件
      log_name = 'log/mq_' + today + '.log'
      log_name = ROOT / log_name
      logging.basicConfig(filename= log_name, 
-                         level=logging.DEBUG, 
+                         level=logging.INFO, 
                          format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',
                          datefmt='%m/%d %H:%M:%S',)
      main()
