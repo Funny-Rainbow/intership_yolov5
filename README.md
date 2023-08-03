@@ -14,7 +14,6 @@ Rabbit MQ
 1.  安装Python 3.9 环境
 2.  安装Python依赖 pip install -r requirements.txt
 3.  (可选,使用gpu)根据显卡安装CUDA，并安装对应的Pytorch、torchvision的GPU版本
-4.  建立postgre sql：id(bigint), create_time(timestamp), file_name(bpchar), detect_data(json), non_argric(boolean)
 
 #### 使用GPU说明
 默认使用CPU，识别一张图片耗时约500ms；使用GPU耗时约40ms
