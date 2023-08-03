@@ -16,7 +16,7 @@ default为store_true的意为默认为false,当传入对应参数如: --nosave �
 可通过命令传参,如：python detect_mq.py --db_pwd '12345'
 """
 
-# 创建sendToSQL.py参数
+# 创建sendToSQL.py参数😘
 def s2S_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--db_host',  type=str, default= '47.109.32.231',               help='数据库 IP')
@@ -30,7 +30,7 @@ def s2S_opt():
          logging.debug('Unknown in sendToSQL.py arguments:', unknown)
     return dbopt
 
-# 创建detect_mq.py参数
+# 创建detect_mq.py参数😂
 def mq_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument('--mq_temp', type=str, default= ROOT / r"my_temp/mq_images",    help='消息队列 图片暂存位置')
@@ -45,7 +45,7 @@ def mq_opt():
         logging.debug(log_temp)
     return mq_opt
 
-# 创建my_detect.py参数
+# 创建my_detect.py参数😍
 def det_opt():
     now = ''
     for i in range(6):

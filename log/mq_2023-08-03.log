@@ -2657,3 +2657,14 @@ socket.gaierror: [Errno 11001] getaddrinfo failed
 08/03 14:39:35-pika.adapters.utils.io_services_utils-DEBUG - Turned off writability watcher: <socket.socket fd=3644, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('192.168.124.71', 57882), raddr=('192.168.124.18', 5672)>
 08/03 14:39:35-pika.heartbeat-DEBUG - Received heartbeat frame
 08/03 14:39:35-pika.adapters.utils.io_services_utils-DEBUG - Recv would block on <socket.socket fd=3644, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('192.168.124.71', 57882), raddr=('192.168.124.18', 5672)>
+08/03 16:46:43-pika.adapters.utils.connection_workflow-INFO - Pika version 1.3.2 connecting to ('192.168.124.18', 5672)
+08/03 16:46:43-pika.adapters.utils.io_services_utils-INFO - Socket connected: <socket.socket fd=3644, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('192.168.124.71', 50735), raddr=('192.168.124.18', 5672)>
+08/03 16:46:43-pika.adapters.utils.connection_workflow-INFO - Streaming transport linked up: (<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001772D65EDF0>, _StreamingProtocolShim: <SelectConnection PROTOCOL transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001772D65EDF0> params=<ConnectionParameters host=192.168.124.18 port=5672 virtual_host=/ ssl=False>>).
+08/03 16:46:43-pika.adapters.utils.connection_workflow-INFO - AMQPConnector - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001772D65EDF0> params=<ConnectionParameters host=192.168.124.18 port=5672 virtual_host=/ ssl=False>>
+08/03 16:46:43-pika.adapters.utils.connection_workflow-INFO - AMQPConnectionWorkflow - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001772D65EDF0> params=<ConnectionParameters host=192.168.124.18 port=5672 virtual_host=/ ssl=False>>
+08/03 16:46:43-pika.adapters.blocking_connection-INFO - Connection workflow succeeded: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001772D65EDF0> params=<ConnectionParameters host=192.168.124.18 port=5672 virtual_host=/ ssl=False>>
+08/03 16:46:43-root-INFO - mq_启动
+08/03 16:46:43-pika.adapters.blocking_connection-INFO - Created channel=1
+08/03 16:46:43-root-INFO - [*] 正在等待消息队列数据
+08/03 16:46:43-root-INFO - [^]消息队列收到消息 正在处理
+08/03 16:46:43-root-INFO - mq_接收到2张图片
