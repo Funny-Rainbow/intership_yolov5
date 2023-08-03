@@ -59,7 +59,7 @@ def send(db, cursor, data):
     if data:
         try:
         # 执行SQL,插入多条数据
-            cursor.executemany("insert into cv_table(create_time, file_name, det_data, non_argric, url, source_id, source_type, geo, capture_time, equipment_id) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", data)# 此处顺序需要与上方产生数据的顺序一致
+            cursor.executemany("insert into ai_table(create_time, file_name, det_data, non_argric, url, source_id, source_type, geo, capture_time, equipment_id) values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", data)# 此处顺序需要与上方产生数据的顺序一致
 
             # 提交数据
             db.commit()
