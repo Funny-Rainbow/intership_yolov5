@@ -7,3 +7,12 @@
 08/04 10:16:57-root-INFO - mq_启动
 08/04 10:16:57-pika.adapters.blocking_connection-INFO - Created channel=1
 08/04 10:16:57-root-INFO - [*] 正在等待消息队列数据
+08/04 13:33:27-pika.adapters.utils.connection_workflow-INFO - Pika version 1.3.2 connecting to ('192.168.124.18', 5672)
+08/04 13:33:27-pika.adapters.utils.io_services_utils-INFO - Socket connected: <socket.socket fd=3652, family=AddressFamily.AF_INET, type=SocketKind.SOCK_STREAM, proto=6, laddr=('192.168.124.71', 54005), raddr=('192.168.124.18', 5672)>
+08/04 13:33:27-pika.adapters.utils.connection_workflow-INFO - Streaming transport linked up: (<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001D1140EA250>, _StreamingProtocolShim: <SelectConnection PROTOCOL transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001D1140EA250> params=<ConnectionParameters host=192.168.124.18 port=5672 virtual_host=/ ssl=False>>).
+08/04 13:33:27-pika.adapters.utils.connection_workflow-INFO - AMQPConnector - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001D1140EA250> params=<ConnectionParameters host=192.168.124.18 port=5672 virtual_host=/ ssl=False>>
+08/04 13:33:27-pika.adapters.utils.connection_workflow-INFO - AMQPConnectionWorkflow - reporting success: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001D1140EA250> params=<ConnectionParameters host=192.168.124.18 port=5672 virtual_host=/ ssl=False>>
+08/04 13:33:27-pika.adapters.blocking_connection-INFO - Connection workflow succeeded: <SelectConnection OPEN transport=<pika.adapters.utils.io_services_utils._AsyncPlaintextTransport object at 0x000001D1140EA250> params=<ConnectionParameters host=192.168.124.18 port=5672 virtual_host=/ ssl=False>>
+08/04 13:33:27-root-INFO - mq_启动
+08/04 13:33:27-pika.adapters.blocking_connection-INFO - Created channel=1
+08/04 13:33:27-root-INFO - [*] 正在等待消息队列数据

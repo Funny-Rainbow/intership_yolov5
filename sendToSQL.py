@@ -75,8 +75,8 @@ def send(db, cursor, data):
         # 关闭数据库连接
         db.close()
     else:
-        logging.warning('未生成数据库数据，请检查')
-        print('未生成数据库数据，请检查')
+        logging.warning('未能生成数据库数据，请检查')
+        print('未能生成数据库数据，请检查')
 
 # 主函数  
 def s2S(detected_files, undetected_files, mq_data):
