@@ -16,6 +16,8 @@ FILE = Path(__file__).resolve()
 ROOT = FILE.parents[0]  # YOLOv5 root directory
 ROOT = Path(os.path.relpath(ROOT, Path.cwd()))  # relative
 
+logging_level = logging.INFO # 可调整日志文件的存储等级 建议选择INFO/DEBUG. DEBUG 会记录大量运行信息,INFO则只会记录关键日志
+
 
 # 参数初始化
 def init():
@@ -49,7 +51,7 @@ def mq_receive(mq_queue):
      channel.basic_consume(
      queue=mq_queue,  # 接收指定queue的消息
      on_message_callback=callback,  # 接收到消息后的处理程序
-     auto_ack=True)  # 指定为True，表示消息接收到后自动给消息发送方回复确认，已收到消息
+     auto_ack=False)  # 指定为True，表示消息接收到后自动给消息发送方回复确认，已收到消息
      print('[*] 正在等待消息队列数据')
      logging.info('[*] 正在等待消息队列数据')
      # 6. 开始循环等待，一直处于等待接收消息的状态
@@ -59,13 +61,14 @@ def mq_receive(mq_queue):
 def mq_data_init(mq_json):
      print('mq_json',mq_json)
      if mq_json:
-          mq_list = json.loads(mq_json)
+          # json转list
+          mq_list = json.loads(mq_json) 
           print('mq_list',mq_list)
           log_temp = 'mq_接收到' + str(len(mq_list)) + '张图片'
           logging.info(log_temp)
           log_temp = 'mq数据:' + str(mq_list)
           logging.debug(log_temp)
-          #mq_data = []
+          # 处理数据 并根据url保存图片
           try:
                for element in mq_list:
                     pic = requests.get(element['url'])
@@ -79,7 +82,7 @@ def mq_data_init(mq_json):
           mq_list = None
      return mq_list
 
-# Base64转图片
+# Base64转图片(弃用)
 def b64_decode(file_name, base64_string, save_path):
      decoded_image_data = base64.b64decode(base64_string)
      image = Image.open(BytesIO(decoded_image_data))
@@ -90,14 +93,14 @@ def recog():
     opt = parameters.det_opt() # 获取需要传入ai识别的参数
     #opt.temp = mq_temp
     opt.temp = mq_temp
-    detected_files, undetected_files = my_detect.main(opt) # 返回识别为疑似非农化的图片名称以及置信度
+    detected_files, undetected_files = my_detect.main(opt) # 检测到的图片和未检测到的分开返回，返回名称，识别框和置信度
     return detected_files, undetected_files
 
 # 删除临时照片
 def delete_temp():
      if os.path.isdir(mq_temp):
           try:
-               shutil.rmtree(mq_temp) # 每次运行结束后，删除临时照片，每次运行会因为未知原因报错，不影响使用
+               shutil.rmtree(mq_temp) # 每次运行结束后，删除临时照片
           except Exception as error:
                print(error, '文件夹已被删除')
 
@@ -114,10 +117,12 @@ def main():
      mq_port  = mq_opt.mq_port
      mq_queue = mq_opt.mq_queue
 
+     # 创建消息队列连接
      credentials = pika.PlainCredentials(mq_user, mq_pwd)
      Parameter = pika.ConnectionParameters(mq_ip,mq_port,'/',credentials)
      connection = pika.BlockingConnection(Parameter)
 
+     # 创建日志
      logging.info('mq_启动')
      print('mq_启动')
      while True:
@@ -133,6 +138,7 @@ def main():
 if __name__ == '__main__':
      today = str(datetime.date.today())
 
+     # 创建用于存放日志和临时图片的文件夹
      if not os.path.isdir(ROOT / 'log'):
           try:
                os.mkdir(ROOT / 'log')
@@ -148,8 +154,8 @@ if __name__ == '__main__':
      # 配置 log 文件
      log_name = 'log/mq_' + today + '.log'
      log_name = ROOT / log_name
-     logging.basicConfig(filename= log_name, 
-                         level=logging.INFO, 
-                         format='%(asctime)s-%(name)s-%(levelname)s - %(message)s',
-                         datefmt='%m/%d %H:%M:%S',)
+     logging.basicConfig(filename= log_name, #文件名
+                         level=logging_level, #存储等级（文件最上方修改）
+                         format='%(asctime)s-%(name)s-%(levelname)s - %(message)s', # 日志的格式
+                         datefmt='%m/%d %H:%M:%S',) # 时间的格式 月/日 时:分:秒
      main()
